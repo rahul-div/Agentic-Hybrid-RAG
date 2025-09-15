@@ -1,0 +1,3 @@
+cd /Users/rahul/Desktop/Graphiti/agentic-rag-knowledge-graph && source .venv/bin/activate && python -m ingestion.ingest --clear-only
+cd /Users/rahul/Desktop/Graphiti/agentic-rag-knowledge-graph/Tenant && python3 tenant_reconciliation_complete.py --mode=reconcile
+cd /Users/rahul/Desktop/Graphiti/agentic-rag-knowledge-graph && python Tenant/complete_end_to_end_workflow.py 
