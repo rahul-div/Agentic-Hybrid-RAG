@@ -26,7 +26,7 @@ except ImportError:
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
-    from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File
+    from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File, Form
     from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
     from fastapi.middleware.cors import CORSMiddleware
     from pydantic import BaseModel, Field
@@ -538,26 +538,30 @@ async def search(
 
         # Import the dependencies class
         from multi_tenant_agent import TenantAgentDependencies
-        
+
         # Create agent context with dependencies
         agent_deps = TenantAgentDependencies(
             tenant_id=str(tenant_uuid),
             session_id="search_session",
             user_id="api_user",
-            tenant_manager=tenant_manager
+            tenant_manager=tenant_manager,
         )
-        
+
         results = []
 
         if search_request.search_type == "vector":
             # Use direct vector search service call
             try:
                 if hasattr(tenant_manager, "ingestion_service"):
-                    tenant_db_url = await tenant_manager.get_tenant_database_url(tenant_uuid)
-                    vector_results = await tenant_manager.ingestion_service.vector_search_for_tenant(
-                        tenant_database_url=tenant_db_url,
-                        query=search_request.query,
-                        limit=search_request.limit
+                    tenant_db_url = await tenant_manager.get_tenant_database_url(
+                        tenant_uuid
+                    )
+                    vector_results = (
+                        await tenant_manager.ingestion_service.vector_search_for_tenant(
+                            tenant_database_url=tenant_db_url,
+                            query=search_request.query,
+                            limit=search_request.limit,
+                        )
                     )
                     results = [
                         SearchResult(
@@ -579,7 +583,7 @@ async def search(
                     graph_results = await tenant_manager.graphiti_client.search(
                         tenant_id=str(tenant_uuid),
                         query=search_request.query,
-                        limit=search_request.limit
+                        limit=search_request.limit,
                     )
                     results = [
                         SearchResult(
@@ -601,12 +605,16 @@ async def search(
             # Use direct hybrid search (vector + keyword/BM25)
             try:
                 if hasattr(tenant_manager, "ingestion_service"):
-                    tenant_db_url = await tenant_manager.get_tenant_database_url(tenant_uuid)
-                    hybrid_results = await tenant_manager.ingestion_service.hybrid_search_for_tenant(
-                        tenant_database_url=tenant_db_url,
-                        query=search_request.query,
-                        limit=search_request.limit,
-                        text_weight=search_request.text_weight
+                    tenant_db_url = await tenant_manager.get_tenant_database_url(
+                        tenant_uuid
+                    )
+                    hybrid_results = (
+                        await tenant_manager.ingestion_service.hybrid_search_for_tenant(
+                            tenant_database_url=tenant_db_url,
+                            query=search_request.query,
+                            limit=search_request.limit,
+                            text_weight=search_request.text_weight,
+                        )
                     )
                     results = [
                         SearchResult(
@@ -631,44 +639,51 @@ async def search(
             # Use comprehensive search (vector + graph + hybrid combined)
             try:
                 all_results = []
-                tenant_db_url = await tenant_manager.get_tenant_database_url(tenant_uuid)
-                
+                tenant_db_url = await tenant_manager.get_tenant_database_url(
+                    tenant_uuid
+                )
+
                 # Vector search
                 if hasattr(tenant_manager, "ingestion_service"):
                     try:
                         vector_results = await tenant_manager.ingestion_service.vector_search_for_tenant(
                             tenant_database_url=tenant_db_url,
                             query=search_request.query,
-                            limit=search_request.limit // 3  # Split limit across methods
+                            limit=search_request.limit
+                            // 3,  # Split limit across methods
                         )
                         for r in vector_results:
-                            all_results.append(SearchResult(
-                                content=r.get("content", ""),
-                                score=r.get("score", 0.0),
-                                source="vector_search",
-                                metadata=r.get("metadata", {}),
-                            ))
+                            all_results.append(
+                                SearchResult(
+                                    content=r.get("content", ""),
+                                    score=r.get("score", 0.0),
+                                    source="vector_search",
+                                    metadata=r.get("metadata", {}),
+                                )
+                            )
                     except Exception as e:
                         logger.warning(f"Vector search failed in comprehensive: {e}")
-                
+
                 # Graph search
                 if tenant_manager.graphiti_client:
                     try:
                         graph_results = await tenant_manager.graphiti_client.search(
                             tenant_id=str(tenant_uuid),
                             query=search_request.query,
-                            limit=search_request.limit // 3
+                            limit=search_request.limit // 3,
                         )
                         for r in graph_results:
-                            all_results.append(SearchResult(
-                                content=r.get("fact", r.get("content", "")),
-                                score=r.get("score", 0.0),
-                                source="graph_search",
-                                metadata=r.get("metadata", {}),
-                            ))
+                            all_results.append(
+                                SearchResult(
+                                    content=r.get("fact", r.get("content", "")),
+                                    score=r.get("score", 0.0),
+                                    source="graph_search",
+                                    metadata=r.get("metadata", {}),
+                                )
+                            )
                     except Exception as e:
                         logger.warning(f"Graph search failed in comprehensive: {e}")
-                
+
                 # Hybrid search
                 if hasattr(tenant_manager, "ingestion_service"):
                     try:
@@ -676,22 +691,24 @@ async def search(
                             tenant_database_url=tenant_db_url,
                             query=search_request.query,
                             limit=search_request.limit // 3,
-                            text_weight=search_request.text_weight
+                            text_weight=search_request.text_weight,
                         )
                         for r in hybrid_results:
-                            all_results.append(SearchResult(
-                                content=r.get("content", ""),
-                                score=r.get("score", 0.0),
-                                source="hybrid_search",
-                                metadata=r.get("metadata", {}),
-                            ))
+                            all_results.append(
+                                SearchResult(
+                                    content=r.get("content", ""),
+                                    score=r.get("score", 0.0),
+                                    source="hybrid_search",
+                                    metadata=r.get("metadata", {}),
+                                )
+                            )
                     except Exception as e:
                         logger.warning(f"Hybrid search failed in comprehensive: {e}")
-                
+
                 # Sort all results by score and limit
                 all_results.sort(key=lambda x: x.score, reverse=True)
-                results = all_results[:search_request.limit]
-                    
+                results = all_results[: search_request.limit]
+
             except Exception as e:
                 logger.error(f"Comprehensive search failed: {e}")
                 results = []
@@ -781,15 +798,24 @@ async def chat(
 @app.post("/documents", response_model=DocumentUploadResponse)
 async def upload_document(
     file: UploadFile = File(...),
+    ingest_vector: bool = Form(True),
+    ingest_graph: bool = Form(True),
     tenant_context: TenantContext = Depends(get_current_tenant),
 ):
-    """Upload a document for the authenticated tenant."""
+    """Upload a document for the authenticated tenant with ingestion options."""
     try:
+        # Validate that at least one ingestion option is selected
+        if not ingest_vector and not ingest_graph:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="At least one ingestion option (vector or graph) must be selected",
+            )
+
         # Read file content
         content = await file.read()
         content_str = content.decode("utf-8", errors="ignore")
 
-        # Create document upload request
+        # Create document upload request with ingestion options
         from tenant_ingestion_models import DocumentInput as ServiceDocumentRequest
 
         upload_request = ServiceDocumentRequest(
@@ -801,6 +827,8 @@ async def upload_document(
                 "content_type": file.content_type,
                 "uploaded_at": datetime.utcnow().isoformat(),
             },
+            ingest_vector=ingest_vector,
+            ingest_graph=ingest_graph,
         )
 
         # Upload document using tenant ingestion service
@@ -813,10 +841,23 @@ async def upload_document(
             else str(tenant_context.tenant_id)
         )
 
-        # Ingest document into both Neon database and Neo4j (Graphiti)
-        ingestion_result = await tenant_manager.ingestion_service.ingest_document_for_tenant(
-            tenant_id=tenant_id_str,
-            document=upload_request,
+        # Log ingestion options
+        ingestion_types = []
+        if ingest_vector:
+            ingestion_types.append("vector database")
+        if ingest_graph:
+            ingestion_types.append("knowledge graph")
+
+        logger.info(
+            f"Document upload for tenant {tenant_id_str}: {file.filename} -> {' + '.join(ingestion_types)}"
+        )
+
+        # Ingest document with specified options
+        ingestion_result = (
+            await tenant_manager.ingestion_service.ingest_document_for_tenant(
+                tenant_id=tenant_id_str,
+                document=upload_request,
+            )
         )
 
         processing_time = (datetime.utcnow() - start_time).total_seconds() * 1000
@@ -834,11 +875,25 @@ async def upload_document(
         )
 
     except Exception as e:
+        error_msg = str(e)
         logger.error(f"Document upload failed: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Document upload failed: {str(e)}",
-        )
+
+        # Check for specific API quota issues
+        if (
+            "quota" in error_msg.lower()
+            or "rate limit" in error_msg.lower()
+            or "429" in error_msg
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail="API quota exhausted. Please wait a few minutes or upgrade your Gemini API plan. "
+                "Check https://ai.google.dev/gemini-api/docs/rate-limits for more details.",
+            )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Document upload failed: {str(e)}",
+            )
 
 
 @app.get("/")

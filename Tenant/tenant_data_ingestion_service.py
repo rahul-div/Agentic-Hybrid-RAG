@@ -86,11 +86,11 @@ class TenantDataIngestionService:
         self, tenant_id: str, document: DocumentInput
     ) -> TenantIngestionResult:
         """
-        Complete document ingestion workflow for specific tenant.
+        Complete document ingestion workflow for specific tenant with configurable options.
 
         Args:
             tenant_id: UUID of the tenant
-            document: DocumentInput to ingest
+            document: DocumentInput to ingest (with ingest_vector and ingest_graph options)
 
         Returns:
             TenantIngestionResult with ingestion details
@@ -105,6 +105,14 @@ class TenantDataIngestionService:
             f"Starting document ingestion for tenant {tenant_id}: {document.title}"
         )
 
+        # Log ingestion options
+        ingestion_types = []
+        if document.ingest_vector:
+            ingestion_types.append("vector database")
+        if document.ingest_graph:
+            ingestion_types.append("knowledge graph")
+        logger.info(f"Ingestion options: {' + '.join(ingestion_types)}")
+
         try:
             # 1. Get tenant-specific dependencies
             deps = await TenantAgentDependencies.create_for_tenant(
@@ -116,16 +124,34 @@ class TenantDataIngestionService:
             # 2. Store document in tenant's dedicated database
             document_id = await self._store_document_in_tenant_db(deps, document)
 
-            # 3. Create and store chunks with embeddings
-            chunks_created = await self._process_and_store_chunks(
-                deps, document_id, document
-            )
+            # 3. Create and store chunks with embeddings (if vector ingestion is enabled)
+            chunks_created = 0
+            if document.ingest_vector:
+                chunks_created = await self._process_and_store_chunks(
+                    deps, document_id, document
+                )
+                logger.info(
+                    f"Vector ingestion: Created {chunks_created} chunks with embeddings"
+                )
+            else:
+                logger.info("Vector ingestion: Skipped (disabled)")
 
-            # 4. Add document content to tenant's graph namespace
-            (
-                graph_episode_created,
-                graph_episode_id,
-            ) = await self._add_document_to_tenant_graph(deps, document_id, document)
+            # 4. Add document content to tenant's graph namespace (if graph ingestion is enabled)
+            graph_episode_created = False
+            graph_episode_id = None
+            if document.ingest_graph:
+                (
+                    graph_episode_created,
+                    graph_episode_id,
+                ) = await self._add_document_to_tenant_graph(
+                    deps, document_id, document
+                )
+                if graph_episode_created:
+                    logger.info(f"Graph ingestion: Created episode {graph_episode_id}")
+                else:
+                    logger.info("Graph ingestion: Episode creation failed")
+            else:
+                logger.info("Graph ingestion: Skipped (disabled)")
 
             # 5. Update tenant usage metrics
             await self._update_tenant_metrics(tenant_id, document)
@@ -266,14 +292,64 @@ class TenantDataIngestionService:
 
             try:
                 chunks_created = 0
+                chunks_with_embeddings = 0
+
                 for i, chunk in enumerate(embedded_chunks):
                     # Get the embedding vector
                     embedding_vector = getattr(chunk, "embedding", None)
+
                     if embedding_vector is None:
-                        logger.warning(f"No embedding for chunk {i}, generating one...")
-                        embedding_vector = await self.embedder.generate_embedding(
-                            chunk.content
+                        logger.warning(
+                            f"No embedding for chunk {i}, skipping vector storage due to API quota/error"
                         )
+                        # Store chunk without embedding
+                        await conn.execute(
+                            """
+                            INSERT INTO chunks (id, document_id, content, chunk_index, token_count, metadata)
+                            VALUES ($1, $2, $3, $4, $5, $6)
+                        """,
+                            str(uuid.uuid4()),
+                            document_id,
+                            chunk.content,
+                            i,
+                            chunk.token_count,
+                            json.dumps(
+                                {
+                                    **(chunk.metadata or {}),
+                                    "embedding_skipped": True,
+                                    "reason": "API quota exhausted or embedding generation failed",
+                                }
+                            ),
+                        )
+                        chunks_created += 1
+                        continue
+
+                    # Validate embedding quality
+                    if not self._is_valid_embedding(embedding_vector):
+                        logger.warning(
+                            f"Invalid embedding for chunk {i}, skipping vector storage"
+                        )
+                        # Store chunk without embedding
+                        await conn.execute(
+                            """
+                            INSERT INTO chunks (id, document_id, content, chunk_index, token_count, metadata)
+                            VALUES ($1, $2, $3, $4, $5, $6)
+                        """,
+                            str(uuid.uuid4()),
+                            document_id,
+                            chunk.content,
+                            i,
+                            chunk.token_count,
+                            json.dumps(
+                                {
+                                    **(chunk.metadata or {}),
+                                    "embedding_skipped": True,
+                                    "reason": "Invalid embedding generated (all zeros)",
+                                }
+                            ),
+                        )
+                        chunks_created += 1
+                        continue
 
                     # Convert embedding list to PostgreSQL vector format
                     if isinstance(embedding_vector, list):
@@ -298,9 +374,11 @@ class TenantDataIngestionService:
                     )
 
                     chunks_created += 1
+                    chunks_with_embeddings += 1
 
-                logger.debug(
-                    f"Created {chunks_created} chunks for document {document_id}"
+                logger.info(
+                    f"Created {chunks_created} chunks for document {document_id} "
+                    f"({chunks_with_embeddings} with valid embeddings, {chunks_created - chunks_with_embeddings} without)"
                 )
                 return chunks_created
 
@@ -317,10 +395,9 @@ class TenantDataIngestionService:
         self, deps: TenantAgentDependencies, document_id: str, document: DocumentInput
     ) -> tuple[bool, str | None]:
         """
-        Add document to tenant's graph namespace via Graphiti using proper chunking.
+        Add document to tenant's graph namespace via Graphiti using optimized batch processing.
 
-        This method follows the same pattern as the single-tenant system but ensures
-        proper tenant isolation via group_id namespacing.
+        This method uses the new optimized batch approach to significantly reduce processing time.
 
         Args:
             deps: Tenant-specific dependencies
@@ -340,9 +417,6 @@ class TenantDataIngestionService:
                 )
                 return False, None
 
-            # Generate tenant namespace for proper isolation
-            namespace = f"tenant_{deps.tenant_id}"
-
             # Create chunks from document content using proper chunker
             chunks = await self.chunker.chunk_document(
                 content=document.content,
@@ -355,93 +429,36 @@ class TenantDataIngestionService:
                 logger.warning(f"No chunks created for document {document_id}")
                 return False, None
 
-            logger.info(
-                f"Adding {len(chunks)} chunks to tenant {deps.tenant_id} graph namespace: {namespace}"
+            # Use the new optimized batch method for much faster processing
+            results = (
+                await deps.shared_graphiti_client.optimized_batch_add_document_chunks(
+                    tenant_id=deps.tenant_id,
+                    document_title=document.title,
+                    document_id=document_id,
+                    chunks=chunks,
+                )
             )
 
-            episodes_created = 0
-            errors = []
+            success = results.get("successful", 0) > 0
+            episodes_created = results.get("successful", 0)
 
-            # Process chunks one by one (following single-tenant pattern)
-            for i, chunk in enumerate(chunks):
-                try:
-                    # Create episode ID with tenant context
-                    episode_id = f"tenant_{deps.tenant_id}_{document_id}_chunk_{i}_{int(datetime.now().timestamp())}"
-
-                    # Prepare episode content (following single-tenant pattern)
-                    episode_content = self._prepare_tenant_episode_content(
-                        chunk, document.title, document.metadata
-                    )
-
-                    # Create source description
-                    source_description = f"Tenant {deps.tenant_id} - Document: {document.title} (Chunk: {i})"
-
-                    # Create flattened metadata for Graphiti compatibility
-                    flattened_metadata = {
-                        "tenant_id": deps.tenant_id,
-                        "document_id": document_id,
-                        "document_title": document.title,
-                        "document_source": document.source,
-                        "chunk_index": i,
-                        "original_length": len(chunk.content),
-                        "processed_length": len(episode_content),
-                    }
-
-                    # Add any additional metadata from chunk
-                    if hasattr(chunk, "metadata") and chunk.metadata:
-                        for key, value in chunk.metadata.items():
-                            if isinstance(value, (str, int, float, bool)):
-                                flattened_metadata[f"chunk_{key}"] = value
-                            else:
-                                flattened_metadata[f"chunk_{key}"] = str(value)
-
-                    # Use the tenant Graphiti client with proper namespace isolation
-                    episode = GraphEpisode(
-                        tenant_id=deps.tenant_id,
-                        name=episode_id,
-                        content=episode_content,
-                        source_description=source_description,
-                        metadata=flattened_metadata,
-                    )
-
-                    success = await deps.shared_graphiti_client.add_episode_for_tenant(
-                        episode
-                    )
-
-                    if success:
-                        episodes_created += 1
-                        logger.debug(
-                            f"✓ Added episode {episode_id} to tenant graph ({episodes_created}/{len(chunks)})"
-                        )
-                    else:
-                        error_msg = f"Failed to add chunk {i} to tenant graph"
-                        logger.error(error_msg)
-                        errors.append(error_msg)
-
-                    # Small delay between episodes
-                    if i < len(chunks) - 1:
-                        await asyncio.sleep(0.2)
-
-                except Exception as e:
-                    error_msg = f"Failed to add chunk {i} to tenant graph: {str(e)}"
-                    logger.error(error_msg)
-                    errors.append(error_msg)
-                    continue
-
-            if episodes_created > 0:
+            if success:
                 logger.info(
                     f"Successfully added {episodes_created} episodes to tenant {deps.tenant_id} graph namespace"
                 )
                 return True, str(episodes_created)
             else:
-                logger.warning("No episodes were successfully added to tenant graph")
+                errors = results.get("errors", [])
+                logger.warning(
+                    f"No episodes were successfully added to tenant graph: {errors}"
+                )
                 return False, None
 
         except Exception as e:
             logger.error(
                 f"Failed to add document {document_id} to tenant graph: {str(e)}"
             )
-            # Don't raise - graph ingestion failure shouldn't fail entire ingestion
+            # Don't raise - continue with ingestion even if graph fails
             return False, None
 
     def _prepare_tenant_episode_content(
@@ -968,5 +985,37 @@ class TenantDataIngestionService:
             return await self.vector_search_for_tenant(
                 tenant_database_url, query, limit
             )
+
+    def _is_valid_embedding(self, embedding: List[float]) -> bool:
+        """
+        Validate if an embedding is valid (not all zeros or invalid values).
+
+        Args:
+            embedding: The embedding vector to validate
+
+        Returns:
+            True if embedding is valid, False otherwise
+        """
+        if not embedding or len(embedding) == 0:
+            return False
+
+        # Check if all values are zero (indicates quota/API failure)
+        if all(val == 0.0 for val in embedding):
+            return False
+
+        # Check for invalid values (NaN, inf)
+        if any(
+            not isinstance(val, (int, float))
+            or (isinstance(val, float) and (val != val or abs(val) == float("inf")))
+            for val in embedding
+        ):
+            return False
+
+        # Check if embedding has reasonable variance (not all same value)
+        unique_values = set(embedding[:10])  # Check first 10 values
+        if len(unique_values) == 1:
+            return False
+
+        return True
 
     # ...existing methods...

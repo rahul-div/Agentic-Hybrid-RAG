@@ -504,8 +504,10 @@ class HTTPMultiTenantCLI:
                     if response.status_code == 200:
                         tenant_result = response.json()
 
-                        console.print("✅ [bold green]Tenant created successfully![/bold green]")
-                        
+                        console.print(
+                            "✅ [bold green]Tenant created successfully![/bold green]"
+                        )
+
                         # Display tenant information
                         table = Table(title="New Tenant Information")
                         table.add_column("Property", style="cyan")
@@ -518,19 +520,27 @@ class HTTPMultiTenantCLI:
                         table.add_row("Region", tenant_result["region"])
                         table.add_row("Plan", tenant_result["plan"])
                         table.add_row("Created At", str(tenant_result["created_at"]))
-                        
+
                         if tenant_result.get("neon_project_id"):
-                            table.add_row("Neon Project ID", tenant_result["neon_project_id"])
+                            table.add_row(
+                                "Neon Project ID", tenant_result["neon_project_id"]
+                            )
 
                         console.print(table)
 
                         # Show authentication info
                         api_key = f"api_key_{tenant_result['tenant_id']}"
-                        console.print(f"\n🔑 [bold yellow]Your API key:[/bold yellow] {api_key}")
-                        console.print("[dim]Save this API key - you'll need it to authenticate![/dim]")
+                        console.print(
+                            f"\n🔑 [bold yellow]Your API key:[/bold yellow] {api_key}"
+                        )
+                        console.print(
+                            "[dim]Save this API key - you'll need it to authenticate![/dim]"
+                        )
 
                     else:
-                        error_detail = response.json().get("detail", "Tenant creation failed")
+                        error_detail = response.json().get(
+                            "detail", "Tenant creation failed"
+                        )
                         console.print(f"❌ [bold red]{error_detail}[/bold red]")
 
                 except httpx.RequestError as e:
@@ -542,7 +552,7 @@ class HTTPMultiTenantCLI:
             console.print(f"❌ [bold red]Error: {e}[/bold red]")
 
     async def upload_document(self):
-        """Upload a document for the authenticated tenant."""
+        """Upload a document for the authenticated tenant with ingestion options."""
         if not self.jwt_token:
             console.print("❌ [bold red]Not authenticated[/bold red]")
             console.print("[dim]Please authenticate first using option 1[/dim]")
@@ -559,18 +569,53 @@ class HTTPMultiTenantCLI:
                 return
 
             if not os.path.isfile(file_path):
-                console.print(f"❌ [bold red]Path is not a file: {file_path}[/bold red]")
+                console.print(
+                    f"❌ [bold red]Path is not a file: {file_path}[/bold red]"
+                )
                 return
 
             # Get file info
             filename = os.path.basename(file_path)
             file_size = os.path.getsize(file_path)
-            
+
             console.print(f"📁 File: {filename}")
             console.print(f"📏 Size: {file_size:,} bytes")
 
+            # Ingestion options
+            console.print("\n🛠️  [bold yellow]Ingestion Options[/bold yellow]")
+            console.print("Choose what to ingest into:")
+            console.print("  1. 🗃️  Vector Database only (fast, for search)")
+            console.print("  2. 🕸️  Knowledge Graph only (slow, for relationships)")
+            console.print("  3. 🚀 Both Vector DB + Knowledge Graph (recommended)")
+
+            ingestion_choice = Prompt.ask(
+                "Select ingestion option", choices=["1", "2", "3"], default="3"
+            )
+
+            # Set ingestion flags based on choice
+            ingest_vector = ingestion_choice in ["1", "3"]
+            ingest_graph = ingestion_choice in ["2", "3"]
+
+            # Show selected options with time estimates
+            options_text = []
+            time_estimate = ""
+            if ingest_vector and ingest_graph:
+                options_text.append("🗃️ Vector Database")
+                options_text.append("🕸️ Knowledge Graph")
+                time_estimate = " (may take 1-3 minutes)"
+            elif ingest_vector:
+                options_text.append("🗃️ Vector Database")
+                time_estimate = " (typically 10-30 seconds)"
+            elif ingest_graph:
+                options_text.append("🕸️ Knowledge Graph")
+                time_estimate = " (may take 1-2 minutes)"
+
+            console.print(f"📝 Selected: {' + '.join(options_text)}{time_estimate}")
+
             # Confirm upload
-            if not Confirm.ask(f"Upload '{filename}' to tenant {self.current_tenant_id}?"):
+            if not Confirm.ask(
+                f"Upload '{filename}' to tenant {self.current_tenant_id}?"
+            ):
                 console.print("[yellow]Upload cancelled[/yellow]")
                 return
 
@@ -580,16 +625,25 @@ class HTTPMultiTenantCLI:
                 TextColumn("[progress.description]{task.description}"),
                 console=console,
             ) as progress:
-                task = progress.add_task("Uploading and processing document...", total=None)
+                task_description = "Uploading and processing document"
+                if ingest_graph and not ingest_vector:
+                    task_description += " (graph processing may take longer)"
+                elif ingest_vector and ingest_graph:
+                    task_description += " (full processing may take longer)"
+
+                task = progress.add_task(task_description + "...", total=None)
 
                 try:
                     # Read and upload file
                     with open(file_path, "rb") as file:
                         files = {"file": (filename, file, "text/plain")}
-                        
+                        data = {
+                            "ingest_vector": str(ingest_vector).lower(),
+                            "ingest_graph": str(ingest_graph).lower(),
+                        }
+
                         response = await self.upload_client.post(
-                            f"{self.api_base_url}/documents",
-                            files=files
+                            f"{self.api_base_url}/documents", files=files, data=data
                         )
 
                     progress.update(task, completed=True)
@@ -597,8 +651,10 @@ class HTTPMultiTenantCLI:
                     if response.status_code == 200:
                         upload_result = response.json()
 
-                        console.print("✅ [bold green]Document uploaded successfully![/bold green]")
-                        
+                        console.print(
+                            "✅ [bold green]Document uploaded successfully![/bold green]"
+                        )
+
                         # Display upload results
                         table = Table(title="Upload Results")
                         table.add_column("Property", style="cyan")
@@ -609,19 +665,57 @@ class HTTPMultiTenantCLI:
                         table.add_row("Tenant ID", upload_result["tenant_id"])
                         table.add_row("Status", upload_result["status"])
                         table.add_row("Uploaded At", str(upload_result["uploaded_at"]))
-                        table.add_row("Chunks Created", str(upload_result["chunks_created"]))
-                        table.add_row("Processing Time", f"{upload_result['processing_time_ms']:.1f}ms")
-                        table.add_row("Vector Stored", "✅" if upload_result["vector_stored"] else "❌")
-                        table.add_row("Graph Stored", "✅" if upload_result["graph_stored"] else "❌")
+                        table.add_row(
+                            "Chunks Created", str(upload_result["chunks_created"])
+                        )
+                        table.add_row(
+                            "Processing Time",
+                            f"{upload_result['processing_time_ms']:.1f}ms",
+                        )
+                        table.add_row(
+                            "Vector Stored",
+                            "✅" if upload_result["vector_stored"] else "❌",
+                        )
+                        table.add_row(
+                            "Graph Stored",
+                            "✅" if upload_result["graph_stored"] else "❌",
+                        )
 
                         console.print(table)
 
-                        console.print("\n🎉 [bold green]Your document is now available for search and chat![/bold green]")
+                        # Show what was actually processed
+                        processed_text = []
+                        if upload_result["vector_stored"]:
+                            processed_text.append("🗃️ vector database")
+                        if upload_result["graph_stored"]:
+                            processed_text.append("🕸️ knowledge graph")
+
+                        if processed_text:
+                            console.print(
+                                f"\n🎉 [bold green]Document processed into: {' + '.join(processed_text)}[/bold green]"
+                            )
+                            console.print(
+                                "📊 [dim]Your document is now available for search and chat![/dim]"
+                            )
+                        else:
+                            console.print(
+                                "\n⚠️  [yellow]Warning: Document uploaded but no processing completed[/yellow]"
+                            )
 
                     else:
-                        error_detail = response.json().get("detail", "Document upload failed")
+                        error_detail = response.json().get(
+                            "detail", "Document upload failed"
+                        )
                         console.print(f"❌ [bold red]{error_detail}[/bold red]")
 
+                except httpx.TimeoutException:
+                    console.print("⏱️ [bold yellow]Upload timed out[/bold yellow]")
+                    console.print(
+                        "[dim]Knowledge graph processing can take several minutes.[/dim]"
+                    )
+                    console.print(
+                        "[dim]Your document may still be processing in the background.[/dim]"
+                    )
                 except httpx.RequestError as e:
                     console.print(f"❌ [bold red]Network error: {e}[/bold red]")
                 except Exception as e:
@@ -648,7 +742,7 @@ class HTTPMultiTenantCLI:
                 console.print("  1. 🔐 Authenticate")
                 console.print("  2. ➕ Create New Tenant")
                 console.print("  3. ℹ️  Show Tenant Info")
-                console.print("  4. 📄 Upload Document")
+                console.print("  4. 📄 Upload Document (with ingestion options)")
                 console.print("  5. 🔍 Advanced Search (Technical)")
                 console.print("  6. 💬 Chat Mode")
                 console.print("  7. 🏥 API Health Check")

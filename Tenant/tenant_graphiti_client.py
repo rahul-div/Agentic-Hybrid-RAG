@@ -1,6 +1,6 @@
 """
-Multi-Tenant Graphiti Client with Namespace Isolation
-Based on official Graphiti documentation and single-tenant best practices.
+Multi-Tenant Graphiti Client with Namespace Isolation and Performance Optimizations
+Based on official Graphiti documentation and performance best practices.
 """
 
 import os
@@ -11,6 +11,12 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone
 from dataclasses import dataclass
 from dotenv import load_dotenv
+
+# Import performance configuration
+from graphiti_performance_config import (
+    get_optimized_graphiti_config,
+    apply_performance_optimizations,
+)
 
 try:
     from graphiti_core import Graphiti
@@ -170,34 +176,50 @@ class TenantGraphitiClient:
         self._initialized = False
 
     async def initialize(self) -> None:
-        """Initialize Graphiti client with proper Gemini configuration."""
+        """Initialize Graphiti client with optimized performance configuration."""
         if self._initialized:
             return
 
         try:
+            # Apply performance optimizations
+            perf_config = apply_performance_optimizations()
+            logger.info(
+                "Applied Graphiti performance optimizations for faster processing"
+            )
+
             if GRAPHITI_AVAILABLE:
-                # Create Gemini LLM client with proper config
+                # Create Gemini LLM client with optimized config for knowledge graphs
+                llm_config = perf_config["llm_config"]
                 llm_client = GeminiClient(
-                    config=LLMConfig(api_key=self.api_key, model=self.llm_model)
+                    config=LLMConfig(
+                        api_key=self.api_key,
+                        model=llm_config["model"],
+                        temperature=llm_config["temperature"],
+                        max_tokens=llm_config["max_tokens"],
+                    )
                 )
 
-                # Create Gemini embedder with proper config
+                # Create Gemini embedder with optimized config
+                embedder_config = perf_config["embedder_config"]
                 embedder = GeminiEmbedder(
                     config=GeminiEmbedderConfig(
                         api_key=self.api_key,
-                        embedding_model="embedding-001",  # Use correct embedding model name
+                        embedding_model=embedder_config["model"],
                     )
                 )
 
-                # Create Gemini reranker with proper config
+                # Create Gemini reranker with optimized config
+                reranker_config = perf_config["reranker_config"]
                 reranker = GeminiRerankerClient(
                     config=LLMConfig(
                         api_key=self.api_key,
-                        model="gemini-1.5-flash",  # Use same model as LLM
+                        model=reranker_config["model"],
+                        temperature=reranker_config["temperature"],
+                        max_tokens=reranker_config["max_tokens"],
                     )
                 )
 
-                # Initialize Graphiti with Gemini clients
+                # Initialize Graphiti with optimized clients
                 self.graphiti = Graphiti(
                     self.neo4j_uri,
                     self.neo4j_user,
@@ -219,7 +241,7 @@ class TenantGraphitiClient:
 
             self._initialized = True
             logger.info(
-                f"TenantGraphitiClient initialized successfully with LLM: {self.llm_model}"
+                f"TenantGraphitiClient initialized successfully with optimized LLM: {self.llm_model}"
             )
 
         except Exception as e:
@@ -282,7 +304,7 @@ class TenantGraphitiClient:
 
     async def add_episode_for_tenant(self, episode: GraphEpisode) -> str | None:
         """
-        Add episode to tenant's namespace with proper error handling.
+        Add episode to tenant's namespace with optimized performance.
 
         Args:
             episode: GraphEpisode with tenant context
@@ -296,19 +318,27 @@ class TenantGraphitiClient:
             namespace = self._get_tenant_namespace(episode.tenant_id)
 
             # Generate episode ID
-            episode_id = f"episode_{episode.tenant_id}_{uuid.uuid4().hex[:8]}"
+            episode_id = (
+                f"{namespace}_{uuid.uuid4().hex[:8]}_{int(datetime.now().timestamp())}"
+            )
+
+            # Optimize content for faster processing
+            optimized_content = self._optimize_episode_content(episode.content)
+            optimized_name = self._optimize_episode_name(episode.name)
 
             await self.graphiti.add_episode(
-                name=episode.name,
-                episode_body=episode.content,
-                source=EpisodeType.text,  # Following single-tenant pattern
-                source_description=episode.source_description,
+                name=optimized_name,
+                episode_body=optimized_content,
+                source=EpisodeType.text,
+                source_description=episode.source_description[
+                    :100
+                ],  # Limit description length
                 reference_time=episode.reference_time or datetime.now(timezone.utc),
                 group_id=namespace,  # Tenant isolation via namespace
             )
 
             logger.info(
-                f"✅ Added episode '{episode.name}' for tenant {episode.tenant_id} (namespace: {namespace})"
+                f"✅ Added episode '{episode_id}' for tenant {episode.tenant_id} (namespace: {namespace})"
             )
             return episode_id
 
@@ -316,55 +346,42 @@ class TenantGraphitiClient:
             logger.error(
                 f"❌ Failed to add episode for tenant {episode.tenant_id}: {e}"
             )
-
-            # Handle known Neo4j property type errors gracefully
-            if "Property values can only be of primitive types" in str(e):
-                logger.warning(
-                    "⚠️  Neo4j property type error - this is a known issue with Graphiti internal metadata"
-                )
-                logger.warning(
-                    "Graphiti is trying to store complex structures (summaries/maps) as Neo4j properties"
-                )
-                logger.warning(
-                    "This is a limitation of the current Graphiti version - continuing anyway"
-                )
-
-                # Try with a simplified episode to work around the issue
-                try:
-                    logger.info("🔄 Attempting simplified episode addition...")
-
-                    # Use minimal content to avoid complex metadata generation
-                    simple_content = (
-                        episode.content[:500] + "..."
-                        if len(episode.content) > 500
-                        else episode.content
-                    )
-
-                    await self.graphiti.add_episode(
-                        name=f"Doc: {episode.name[:50]}",  # Shorter name
-                        episode_body=simple_content,  # Truncated content
-                        source=EpisodeType.text,
-                        source_description="Document (simplified)",  # Simple description
-                        reference_time=datetime.now(timezone.utc),
-                        group_id=namespace,
-                    )
-
-                    episode_id = f"episode_{episode.tenant_id}_{uuid.uuid4().hex[:8]}"
-                    logger.info(
-                        f"✅ Added simplified episode for tenant {episode.tenant_id} (namespace: {namespace})"
-                    )
-                    return episode_id
-
-                except Exception as e2:
-                    logger.error(f"❌ Simplified episode addition also failed: {e2}")
-                    # Generate episode ID anyway to indicate attempt was made
-                    episode_id = f"episode_{episode.tenant_id}_{uuid.uuid4().hex[:8]}"
-                    logger.warning(
-                        f"⚠️  Returning episode ID {episode_id} despite storage failure"
-                    )
-                    return episode_id
-
             return None
+
+    def _optimize_episode_content(self, content: str) -> str:
+        """
+        Optimize episode content for faster knowledge graph processing.
+
+        Based on Graphiti best practices:
+        - Keep content concise and focused
+        - Remove excessive whitespace and formatting
+        - Limit content length to reduce LLM processing time
+        """
+        # Remove excessive whitespace and normalize
+        content = " ".join(content.split())
+
+        # Limit content length to 1000 characters for faster processing
+        if len(content) > 1000:
+            # Try to find a good breaking point (sentence boundary)
+            truncated = content[:1000]
+            last_period = truncated.rfind(".")
+            last_newline = truncated.rfind("\n")
+
+            break_point = max(last_period, last_newline)
+            if break_point > 500:  # Only use break point if it's not too early
+                content = content[: break_point + 1]
+            else:
+                content = content[:1000] + "..."
+
+        return content
+
+    def _optimize_episode_name(self, name: str) -> str:
+        """Optimize episode name for consistent processing."""
+        # Remove excessive whitespace and limit length
+        name = " ".join(name.split())
+        if len(name) > 100:
+            name = name[:97] + "..."
+        return name
 
     async def add_episode_for_tenant_simple(
         self,
@@ -397,7 +414,7 @@ class TenantGraphitiClient:
         self, tenant_id: str, episodes: List[GraphEpisode]
     ) -> Dict[str, Any]:
         """
-        Add multiple episodes for a tenant in batch.
+        Add multiple episodes for a tenant with optimized batch processing.
 
         Args:
             tenant_id: Unique tenant identifier
@@ -416,23 +433,156 @@ class TenantGraphitiClient:
             "errors": [],
         }
 
-        for episode in episodes:
-            if episode.tenant_id != tenant_id:
-                results["errors"].append(f"Episode '{episode.name}' tenant mismatch")
-                results["failed"] += 1
-                continue
-
-            success = await self.add_episode_for_tenant(episode)
-            if success:
-                results["successful"] += 1
-            else:
-                results["failed"] += 1
-                results["errors"].append(f"Failed to add episode '{episode.name}'")
+        if not episodes:
+            return results
 
         logger.info(
-            f"Batch added {results['successful']}/{results['total_episodes']} episodes for tenant {tenant_id}"
+            f"Starting batch processing of {len(episodes)} episodes for tenant {tenant_id}"
+        )
+
+        # Process episodes in smaller batches to avoid overwhelming the LLM
+        batch_size = 3  # Optimal batch size for Graphiti
+        episode_batches = [
+            episodes[i : i + batch_size] for i in range(0, len(episodes), batch_size)
+        ]
+
+        for batch_idx, episode_batch in enumerate(episode_batches):
+            logger.info(
+                f"Processing batch {batch_idx + 1}/{len(episode_batches)} ({len(episode_batch)} episodes)"
+            )
+
+            # Add small delay between batches to prevent rate limiting
+            if batch_idx > 0:
+                await asyncio.sleep(0.5)
+
+            for episode in episode_batch:
+                if episode.tenant_id != tenant_id:
+                    results["errors"].append(
+                        f"Episode '{episode.name}' tenant mismatch"
+                    )
+                    results["failed"] += 1
+                    continue
+
+                try:
+                    success = await self.add_episode_for_tenant(episode)
+                    if success:
+                        results["successful"] += 1
+                        logger.debug(
+                            f"Successfully added episode: {episode.name[:50]}..."
+                        )
+                    else:
+                        results["failed"] += 1
+                        results["errors"].append(
+                            f"Failed to add episode '{episode.name}'"
+                        )
+                except Exception as e:
+                    results["failed"] += 1
+                    results["errors"].append(
+                        f"Error adding episode '{episode.name}': {str(e)}"
+                    )
+                    logger.error(f"Error in batch processing: {e}")
+
+        logger.info(
+            f"Batch completed: {results['successful']}/{results['total_episodes']} episodes for tenant {tenant_id}"
         )
         return results
+
+    async def optimized_batch_add_document_chunks(
+        self,
+        tenant_id: str,
+        document_title: str,
+        document_id: str,
+        chunks: List[Any],  # DocumentChunk objects
+    ) -> Dict[str, Any]:
+        """
+        Optimized method specifically for adding document chunks to knowledge graph.
+
+        This method combines multiple chunks into fewer, more meaningful episodes
+        to reduce LLM processing overhead.
+        """
+        if not chunks:
+            return {"successful": 0, "failed": 0, "errors": []}
+
+        logger.info(
+            f"Adding {len(chunks)} chunks to tenant {tenant_id} graph namespace: {self._get_tenant_namespace(tenant_id)}"
+        )
+
+        # Combine chunks into fewer episodes for better performance
+        episodes = []
+
+        # Strategy 1: If few chunks, create one episode per chunk
+        if len(chunks) <= 3:
+            for i, chunk in enumerate(chunks):
+                episode_name = f"{document_title} - Part {i + 1}"
+                episode_content = self._prepare_optimized_episode_content(
+                    chunk, document_title, i
+                )
+
+                episodes.append(
+                    GraphEpisode(
+                        tenant_id=tenant_id,
+                        name=episode_name,
+                        content=episode_content,
+                        source_description=f"Document chunk from {document_title}",
+                        reference_time=datetime.now(timezone.utc),
+                    )
+                )
+        else:
+            # Strategy 2: Combine chunks into logical groups
+            chunks_per_episode = max(2, len(chunks) // 3)  # Aim for 3 episodes max
+
+            for i in range(0, len(chunks), chunks_per_episode):
+                chunk_group = chunks[i : i + chunks_per_episode]
+                episode_name = (
+                    f"{document_title} - Section {(i // chunks_per_episode) + 1}"
+                )
+
+                # Combine content from multiple chunks
+                combined_content = self._combine_chunks_content(
+                    chunk_group, document_title
+                )
+
+                episodes.append(
+                    GraphEpisode(
+                        tenant_id=tenant_id,
+                        name=episode_name,
+                        content=combined_content,
+                        source_description=f"Document section from {document_title}",
+                        reference_time=datetime.now(timezone.utc),
+                    )
+                )
+
+        # Process episodes with the optimized batch method
+        return await self.batch_add_episodes_for_tenant(tenant_id, episodes)
+
+    def _prepare_optimized_episode_content(
+        self, chunk: Any, document_title: str, chunk_index: int
+    ) -> str:
+        """Prepare optimized content for a single chunk episode."""
+        content_parts = [
+            f"Document: {document_title}",
+            f"Section {chunk_index + 1}:",
+            chunk.content,
+        ]
+
+        if hasattr(chunk, "metadata") and chunk.metadata:
+            # Add only essential metadata
+            if "source" in chunk.metadata:
+                content_parts.append(f"Source: {chunk.metadata['source']}")
+
+        full_content = "\n\n".join(content_parts)
+        return self._optimize_episode_content(full_content)
+
+    def _combine_chunks_content(self, chunks: List[Any], document_title: str) -> str:
+        """Combine multiple chunks into a single optimized episode content."""
+        content_parts = [f"Document: {document_title}"]
+
+        for i, chunk in enumerate(chunks):
+            content_parts.append(f"Section {i + 1}:")
+            content_parts.append(chunk.content)
+
+        combined = "\n\n".join(content_parts)
+        return self._optimize_episode_content(combined)
 
     # Search and Query Methods
 

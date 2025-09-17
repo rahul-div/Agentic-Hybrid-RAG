@@ -258,24 +258,39 @@ class EmbeddingGenerator:
 
                 # Add embeddings to chunks
                 for chunk, embedding in zip(batch_chunks, embeddings):
-                    # Create a new chunk with embedding
-                    embedded_chunk = DocumentChunk(
-                        content=chunk.content,
-                        index=chunk.index,
-                        start_char=chunk.start_char,
-                        end_char=chunk.end_char,
-                        metadata={
-                            **chunk.metadata,
-                            "embedding_model": self.model,
-                            "embedding_dimensions": len(embedding),
-                            "embedding_generated_at": datetime.now().isoformat(),
-                        },
-                        token_count=chunk.token_count,
-                    )
+                    # Validate embedding quality
+                    if self._is_valid_embedding(embedding):
+                        # Create a new chunk with embedding
+                        embedded_chunk = DocumentChunk(
+                            content=chunk.content,
+                            index=chunk.index,
+                            start_char=chunk.start_char,
+                            end_char=chunk.end_char,
+                            metadata={
+                                **chunk.metadata,
+                                "embedding_model": self.model,
+                                "embedding_dimensions": len(embedding),
+                                "embedding_generated_at": datetime.now().isoformat(),
+                            },
+                            token_count=chunk.token_count,
+                        )
 
-                    # Add embedding as a separate attribute
-                    embedded_chunk.embedding = embedding
-                    embedded_chunks.append(embedded_chunk)
+                        # Add embedding as a separate attribute
+                        embedded_chunk.embedding = embedding
+                        embedded_chunks.append(embedded_chunk)
+                    else:
+                        # Skip chunks with invalid embeddings
+                        logger.warning(
+                            f"Skipping chunk with invalid embedding (all zeros or invalid values)"
+                        )
+                        chunk.metadata.update(
+                            {
+                                "embedding_error": "Invalid embedding generated (quota exhausted or API error)",
+                                "embedding_skipped_at": datetime.now().isoformat(),
+                            }
+                        )
+                        # Don't add embedding attribute to prevent storage
+                        embedded_chunks.append(chunk)
 
                 # Progress update
                 current_batch = (i // self.batch_size) + 1
@@ -318,6 +333,38 @@ class EmbeddingGenerator:
     def get_embedding_dimension(self) -> int:
         """Get the dimension of embeddings for this model."""
         return self.config["dimensions"]
+
+    def _is_valid_embedding(self, embedding: List[float]) -> bool:
+        """
+        Validate if an embedding is valid (not all zeros or invalid values).
+
+        Args:
+            embedding: The embedding vector to validate
+
+        Returns:
+            True if embedding is valid, False otherwise
+        """
+        if not embedding or len(embedding) == 0:
+            return False
+
+        # Check if all values are zero (indicates quota/API failure)
+        if all(val == 0.0 for val in embedding):
+            return False
+
+        # Check for invalid values (NaN, inf)
+        if any(
+            not isinstance(val, (int, float))
+            or (isinstance(val, float) and (val != val or abs(val) == float("inf")))
+            for val in embedding
+        ):
+            return False
+
+        # Check if embedding has reasonable variance (not all same value)
+        unique_values = set(embedding[:10])  # Check first 10 values
+        if len(unique_values) == 1:
+            return False
+
+        return True
 
 
 # Cache for embeddings

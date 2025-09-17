@@ -16,6 +16,13 @@ class DocumentInput(BaseModel):
     metadata: Dict[str, Any] = Field(
         default_factory=dict, description="Additional document metadata"
     )
+    # Ingestion options
+    ingest_vector: bool = Field(
+        default=True, description="Whether to ingest into vector database"
+    )
+    ingest_graph: bool = Field(
+        default=True, description="Whether to ingest into knowledge graph"
+    )
 
 
 class DocumentChunk(BaseModel):
