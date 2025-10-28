@@ -1,101 +1,112 @@
-2025-09-17 15:50:27,844 - __main__ - INFO - Starting Interactive Multi-Tenant RAG API on 127.0.0.1:8000
-2025-09-17 15:50:27,866 - interactive_multi_tenant_api - INFO - Starting Multi-Tenant RAG API...
-2025-09-17 15:50:27,866 - interactive_multi_tenant_api - INFO - Neo4j URI: neo4j://127.0.0.1:7687
-2025-09-17 15:50:27,866 - interactive_multi_tenant_api - INFO - Neo4j User: neo4j
-2025-09-17 15:50:27,866 - interactive_multi_tenant_api - INFO - Neo4j Password: ***
-2025-09-17 15:50:27,866 - tenant_manager - INFO - TenantManager initialized with Graphiti client
-2025-09-17 15:50:27,866 - ingestion.chunker - INFO - ChunkingConfig initialized for Gemini: chunk_size=800, overlap=150
-2025-09-17 15:50:27,866 - ingestion.chunker - INFO - Creating SemanticChunker with Gemini LLM support
-2025-09-17 15:50:27,866 - multi_tenant_ingestion - INFO - Multi-tenant ingestion pipeline initialized
-2025-09-17 15:50:27,866 - tenant_manager - INFO - TenantManager initialized with multi-tenant ingestion pipeline
-2025-09-17 15:50:27,866 - tenant_manager - INFO - TenantManager initialized with catalog database and Neon API
-2025-09-17 15:50:27,866 - interactive_multi_tenant_api - INFO - Tenant manager initialized
-2025-09-17 15:50:27,875 - ingestion.chunker - INFO - ChunkingConfig initialized for Gemini: chunk_size=800, overlap=150
-2025-09-17 15:50:27,875 - interactive_multi_tenant_api - INFO - Tenant ingestion service initialized
-2025-09-17 15:50:27,875 - auth_middleware - INFO - JWT Authenticator initialized
-2025-09-17 15:50:27,875 - interactive_multi_tenant_api - INFO - JWT authenticator initialized
-2025-09-17 15:50:27,875 - interactive_multi_tenant_api - INFO - 🎯 Multi-Tenant RAG API ready - all backend logs will appear in this terminal
-2025-09-17 15:50:27,875 - interactive_multi_tenant_api - INFO - 📊 Backend activity from CLI and API operations will be shown below:
-2025-09-17 15:50:48,298 - catalog_database - INFO - Catalog database pool initialized with 5-20 connections
-2025-09-17 15:50:48,463 - catalog_database - INFO - Catalog database connection test successful
-2025-09-17 15:50:48,464 - tenant_graphiti_client - INFO - Applied Graphiti performance optimizations for faster processing
-2025-09-17 15:50:48,464 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-2025-09-17 15:50:48,497 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-2025-09-17 15:50:48,520 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-2025-09-17 15:50:48,595 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX community_uuid IF NOT EXISTS FOR (e:Community) ON (e.uuid)` has no effect.} {description: `RANGE INDEX community_uuid FOR (e:Community) ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX community_uuid IF NOT EXISTS FOR (n:Community) ON (n.uuid)'
-2025-09-17 15:50:48,596 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX relation_uuid IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.uuid)` has no effect.} {description: `RANGE INDEX relation_uuid FOR ()-[e:RELATES_TO]-() ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX relation_uuid IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.uuid)'
-2025-09-17 15:50:48,597 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX mention_uuid IF NOT EXISTS FOR ()-[e:MENTIONS]-() ON (e.uuid)` has no effect.} {description: `RANGE INDEX mention_uuid FOR ()-[e:MENTIONS]-() ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX mention_uuid IF NOT EXISTS FOR ()-[e:MENTIONS]-() ON (e.uuid)'
-2025-09-17 15:50:48,598 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX has_member_uuid IF NOT EXISTS FOR ()-[e:HAS_MEMBER]-() ON (e.uuid)` has no effect.} {description: `RANGE INDEX has_member_uuid FOR ()-[e:HAS_MEMBER]-() ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX has_member_uuid IF NOT EXISTS FOR ()-[e:HAS_MEMBER]-() ON (e.uuid)'
-2025-09-17 15:50:48,598 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX entity_uuid IF NOT EXISTS FOR (e:Entity) ON (e.uuid)` has no effect.} {description: `RANGE INDEX entity_uuid FOR (e:Entity) ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX entity_uuid IF NOT EXISTS FOR (n:Entity) ON (n.uuid)'
-2025-09-17 15:50:48,598 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX episode_uuid IF NOT EXISTS FOR (e:Episodic) ON (e.uuid)` has no effect.} {description: `RANGE INDEX episode_uuid FOR (e:Episodic) ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX episode_uuid IF NOT EXISTS FOR (n:Episodic) ON (n.uuid)'
-2025-09-17 15:50:48,600 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX entity_group_id IF NOT EXISTS FOR (e:Entity) ON (e.group_id)` has no effect.} {description: `RANGE INDEX entity_group_id FOR (e:Entity) ON (e.group_id)` already exists.} {position: None} for query: 'CREATE INDEX entity_group_id IF NOT EXISTS FOR (n:Entity) ON (n.group_id)'
-2025-09-17 15:50:48,602 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX episode_group_id IF NOT EXISTS FOR (e:Episodic) ON (e.group_id)` has no effect.} {description: `RANGE INDEX episode_group_id FOR (e:Episodic) ON (e.group_id)` already exists.} {position: None} for query: 'CREATE INDEX episode_group_id IF NOT EXISTS FOR (n:Episodic) ON (n.group_id)'
-2025-09-17 15:50:48,603 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX relation_group_id IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.group_id)` has no effect.} {description: `RANGE INDEX relation_group_id FOR ()-[e:RELATES_TO]-() ON (e.group_id)` already exists.} {position: None} for query: 'CREATE INDEX relation_group_id IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.group_id)'
-2025-09-17 15:50:48,604 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX mention_group_id IF NOT EXISTS FOR ()-[e:MENTIONS]-() ON (e.group_id)` has no effect.} {description: `RANGE INDEX mention_group_id FOR ()-[e:MENTIONS]-() ON (e.group_id)` already exists.} {position: None} for query: 'CREATE INDEX mention_group_id IF NOT EXISTS FOR ()-[e:MENTIONS]-() ON (e.group_id)'
-2025-09-17 15:50:48,604 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE FULLTEXT INDEX node_name_and_summary IF NOT EXISTS FOR (e:Entity) ON EACH [e.name, e.summary, e.group_id]` has no effect.} {description: `FULLTEXT INDEX node_name_and_summary FOR (e:Entity) ON EACH [e.name, e.summary, e.group_id]` already exists.} {position: None} for query: 'CREATE FULLTEXT INDEX node_name_and_summary IF NOT EXISTS \n            FOR (n:Entity) ON EACH [n.name, n.summary, n.group_id]'
-2025-09-17 15:50:48,605 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE FULLTEXT INDEX community_name IF NOT EXISTS FOR (e:Community) ON EACH [e.name, e.group_id]` has no effect.} {description: `FULLTEXT INDEX community_name FOR (e:Community) ON EACH [e.name, e.group_id]` already exists.} {position: None} for query: 'CREATE FULLTEXT INDEX community_name IF NOT EXISTS \n            FOR (n:Community) ON EACH [n.name, n.group_id]'
-2025-09-17 15:50:48,606 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX name_entity_index IF NOT EXISTS FOR (e:Entity) ON (e.name)` has no effect.} {description: `RANGE INDEX name_entity_index FOR (e:Entity) ON (e.name)` already exists.} {position: None} for query: 'CREATE INDEX name_entity_index IF NOT EXISTS FOR (n:Entity) ON (n.name)'
-2025-09-17 15:50:48,606 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE FULLTEXT INDEX edge_name_and_fact IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON EACH [e.name, e.fact, e.group_id]` has no effect.} {description: `FULLTEXT INDEX edge_name_and_fact FOR ()-[e:RELATES_TO]-() ON EACH [e.name, e.fact, e.group_id]` already exists.} {position: None} for query: 'CREATE FULLTEXT INDEX edge_name_and_fact IF NOT EXISTS \n            FOR ()-[e:RELATES_TO]-() ON EACH [e.name, e.fact, e.group_id]'
-2025-09-17 15:50:48,607 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX created_at_entity_index IF NOT EXISTS FOR (e:Entity) ON (e.created_at)` has no effect.} {description: `RANGE INDEX created_at_entity_index FOR (e:Entity) ON (e.created_at)` already exists.} {position: None} for query: 'CREATE INDEX created_at_entity_index IF NOT EXISTS FOR (n:Entity) ON (n.created_at)'
-2025-09-17 15:50:48,608 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX created_at_episodic_index IF NOT EXISTS FOR (e:Episodic) ON (e.created_at)` has no effect.} {description: `RANGE INDEX created_at_episodic_index FOR (e:Episodic) ON (e.created_at)` already exists.} {position: None} for query: 'CREATE INDEX created_at_episodic_index IF NOT EXISTS FOR (n:Episodic) ON (n.created_at)'
-2025-09-17 15:50:48,609 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX valid_at_episodic_index IF NOT EXISTS FOR (e:Episodic) ON (e.valid_at)` has no effect.} {description: `RANGE INDEX valid_at_episodic_index FOR (e:Episodic) ON (e.valid_at)` already exists.} {position: None} for query: 'CREATE INDEX valid_at_episodic_index IF NOT EXISTS FOR (n:Episodic) ON (n.valid_at)'
-2025-09-17 15:50:48,611 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX created_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.created_at)` has no effect.} {description: `RANGE INDEX created_at_edge_index FOR ()-[e:RELATES_TO]-() ON (e.created_at)` already exists.} {position: None} for query: 'CREATE INDEX created_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.created_at)'
-2025-09-17 15:50:48,611 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX name_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.name)` has no effect.} {description: `RANGE INDEX name_edge_index FOR ()-[e:RELATES_TO]-() ON (e.name)` already exists.} {position: None} for query: 'CREATE INDEX name_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.name)'
-2025-09-17 15:50:48,612 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX valid_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.valid_at)` has no effect.} {description: `RANGE INDEX valid_at_edge_index FOR ()-[e:RELATES_TO]-() ON (e.valid_at)` already exists.} {position: None} for query: 'CREATE INDEX valid_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.valid_at)'
-2025-09-17 15:50:48,612 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX expired_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.expired_at)` has no effect.} {description: `RANGE INDEX expired_at_edge_index FOR ()-[e:RELATES_TO]-() ON (e.expired_at)` already exists.} {position: None} for query: 'CREATE INDEX expired_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.expired_at)'
-2025-09-17 15:50:48,613 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE FULLTEXT INDEX episode_content IF NOT EXISTS FOR (e:Episodic) ON EACH [e.content, e.source, e.source_description, e.group_id]` has no effect.} {description: `FULLTEXT INDEX episode_content FOR (e:Episodic) ON EACH [e.content, e.source, e.source_description, e.group_id]` already exists.} {position: None} for query: 'CREATE FULLTEXT INDEX episode_content IF NOT EXISTS \n            FOR (e:Episodic) ON EACH [e.content, e.source, e.source_description, e.group_id]'
-2025-09-17 15:50:48,613 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX invalid_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.invalid_at)` has no effect.} {description: `RANGE INDEX invalid_at_edge_index FOR ()-[e:RELATES_TO]-() ON (e.invalid_at)` already exists.} {position: None} for query: 'CREATE INDEX invalid_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.invalid_at)'
-2025-09-17 15:50:48,614 - tenant_graphiti_client - INFO - TenantGraphitiClient initialized successfully with optimized LLM: gemini-2.0-flash-thinking-exp-1219
-2025-09-17 15:50:48,614 - tenant_manager - INFO - Starting tenant creation for:  ()
-2025-09-17 15:50:48,614 - tenant_manager - INFO - Creating Neon project for tenant: b310de3e-5104-4f13-b05b-b52c8469ea62
-2025-09-17 15:50:48,614 - neon_project_manager - INFO - Creating Neon project for tenant:  -> tenant-
-2025-09-17 15:50:48,614 - neon_project_manager - INFO - Using confirmed organization ID: org-divine-leaf-04179575
-2025-09-17 15:50:49,725 - httpx - INFO - HTTP Request: POST https://console.neon.tech/api/v2/projects "HTTP/1.1 201 Created"
-2025-09-17 15:50:49,732 - neon_project_manager - INFO - Getting connection details for project late-breeze-44145858...
-2025-09-17 15:50:52,083 - httpx - INFO - HTTP Request: GET https://console.neon.tech/api/v2/projects/late-breeze-44145858/branches "HTTP/1.1 200 OK"
-2025-09-17 15:50:52,473 - httpx - INFO - HTTP Request: GET https://console.neon.tech/api/v2/projects/late-breeze-44145858/connection_uri?branch_id=br-autumn-tooth-adlik3jc&role_name=neondb_owner&database_name=neondb "HTTP/1.1 200 OK"
-2025-09-17 15:50:52,475 - neon_project_manager - INFO - Successfully created Neon project: late-breeze-44145858 for tenant: 
-2025-09-17 15:50:52,475 - tenant_manager - INFO - Initializing database schema for tenant: b310de3e-5104-4f13-b05b-b52c8469ea62
-2025-09-17 15:50:52,475 - tenant_schema_initializer - INFO - Initializing tenant database schema
-2025-09-17 15:50:56,614 - tenant_schema_initializer - INFO - Successfully initialized tenant database schema
-2025-09-17 15:50:56,930 - tenant_manager - INFO - Storing tenant mapping in catalog for: b310de3e-5104-4f13-b05b-b52c8469ea62
-2025-09-17 15:50:57,369 - catalog_database - INFO - Created tenant project mapping: 9cec6639-d2b0-4654-9095-0ce807b3211c -> late-breeze-44145858
-2025-09-17 15:50:57,482 - tenant_manager - INFO - Initializing Graphiti namespace for tenant: b310de3e-5104-4f13-b05b-b52c8469ea62
-2025-09-17 15:50:57,482 - tenant_manager - INFO - Initializing Graphiti namespace for tenant: 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 15:50:57,559 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:50:58,725 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:50:59,319 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:51:00,765 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:51:03,049 - graphiti_core.graphiti - INFO - Completed add_episode in 5567.3987865448 ms
-2025-09-17 15:51:03,050 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_9cec6639-d2b0-4654-9095-0ce807b3211c_81290142_1758104457' for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c)
-2025-09-17 15:51:03,050 - tenant_manager - INFO - Successfully initialized Graphiti namespace for tenant: 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 15:51:03,050 - tenant_manager - INFO - Successfully created tenant: 9cec6639-d2b0-4654-9095-0ce807b3211c with Neon project: late-breeze-44145858
-2025-09-17 15:52:01,601 - auth_middleware - INFO - Created access token for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 15:52:27,296 - interactive_multi_tenant_api - INFO - Document upload for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: INGESTION_OPTIONS_README.md -> vector database + knowledge graph
-2025-09-17 15:52:27,298 - tenant_data_ingestion_service - INFO - Starting document ingestion for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: INGESTION_OPTIONS_README.md
-2025-09-17 15:52:27,298 - tenant_data_ingestion_service - INFO - Ingestion options: vector database + knowledge graph
-2025-09-17 15:52:31,520 - tenant_data_ingestion_service - INFO - Creating chunks for document: INGESTION_OPTIONS_README.md
-2025-09-17 15:52:31,523 - tenant_data_ingestion_service - INFO - Generating embeddings for 3 chunks
-2025-09-17 15:52:31,523 - ingestion.embedder - INFO - Generating embeddings for 3 chunks
-2025-09-17 15:52:33,459 - ingestion.embedder - INFO - Processed batch 1/1
-2025-09-17 15:52:33,459 - ingestion.embedder - INFO - Generated embeddings for 3 chunks (model: embedding-001, dimensions: 768)
-2025-09-17 15:52:38,922 - tenant_data_ingestion_service - INFO - Created 3 chunks for document 11535e98-826a-4741-9147-8de9ff1a5adc (3 with valid embeddings, 0 without)
-2025-09-17 15:52:39,252 - tenant_data_ingestion_service - INFO - Vector ingestion: Created 3 chunks with embeddings
-2025-09-17 15:52:39,253 - tenant_graphiti_client - INFO - Adding 3 chunks to tenant 9cec6639-d2b0-4654-9095-0ce807b3211c graph namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 15:52:39,253 - tenant_graphiti_client - INFO - Starting batch processing of 3 episodes for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 15:52:39,253 - tenant_graphiti_client - INFO - Processing batch 1/1 (3 episodes)
-2025-09-17 15:52:39,347 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:41,039 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:42,824 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:47,650 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:47,655 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:47,660 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:47,665 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:47,669 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:47,673 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:47,676 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:49,729 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 15:52:49,730 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
+2025-10-28 14:32:05,320 - __main__ - INFO - Starting Interactive Multi-Tenant RAG API on 127.0.0.1:8000
+2025-10-28 14:32:05,340 - interactive_multi_tenant_api - INFO - Starting Multi-Tenant RAG API...
+2025-10-28 14:32:05,340 - interactive_multi_tenant_api - INFO - Neo4j URI: neo4j://127.0.0.1:7687
+2025-10-28 14:32:05,340 - interactive_multi_tenant_api - INFO - Neo4j User: neo4j
+2025-10-28 14:32:05,340 - interactive_multi_tenant_api - INFO - Neo4j Password: ***
+2025-10-28 14:32:05,340 - tenant_manager - INFO - TenantManager initialized with Graphiti client
+2025-10-28 14:32:05,340 - ingestion.chunker - INFO - ChunkingConfig initialized for Gemini: chunk_size=800, overlap=150
+2025-10-28 14:32:05,340 - ingestion.chunker - INFO - Creating SemanticChunker with Gemini LLM support
+2025-10-28 14:32:05,340 - multi_tenant_ingestion - INFO - Multi-tenant ingestion pipeline initialized
+2025-10-28 14:32:05,340 - tenant_manager - INFO - TenantManager initialized with multi-tenant ingestion pipeline
+2025-10-28 14:32:05,340 - tenant_manager - INFO - TenantManager initialized with catalog database and Neon API
+2025-10-28 14:32:05,340 - interactive_multi_tenant_api - INFO - Tenant manager initialized
+2025-10-28 14:32:05,343 - ingestion.chunker - INFO - ChunkingConfig initialized for Gemini: chunk_size=800, overlap=150
+2025-10-28 14:32:05,343 - interactive_multi_tenant_api - INFO - Tenant ingestion service initialized
+2025-10-28 14:32:05,343 - auth_middleware - INFO - JWT Authenticator initialized
+2025-10-28 14:32:05,343 - interactive_multi_tenant_api - INFO - JWT authenticator initialized
+2025-10-28 14:32:05,343 - interactive_multi_tenant_api - INFO - 🎯 Multi-Tenant RAG API ready - all backend logs will appear in this terminal
+2025-10-28 14:32:05,343 - interactive_multi_tenant_api - INFO - 📊 Backend activity from CLI and API operations will be shown below:
+2025-10-28 14:32:13,692 - catalog_database - INFO - Catalog database pool initialized with 5-20 connections
+2025-10-28 14:32:13,869 - catalog_database - INFO - Catalog database connection test successful
+2025-10-28 14:32:13,869 - tenant_graphiti_client - INFO - Applied Graphiti performance optimizations for faster processing
+2025-10-28 14:32:13,870 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2025-10-28 14:32:13,915 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2025-10-28 14:32:13,940 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+2025-10-28 14:32:14,017 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX entity_group_id IF NOT EXISTS FOR (e:Entity) ON (e.group_id)` has no effect.} {description: `RANGE INDEX entity_group_id FOR (e:Entity) ON (e.group_id)` already exists.} {position: None} for query: 'CREATE INDEX entity_group_id IF NOT EXISTS FOR (n:Entity) ON (n.group_id)'
+2025-10-28 14:32:14,019 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX episode_group_id IF NOT EXISTS FOR (e:Episodic) ON (e.group_id)` has no effect.} {description: `RANGE INDEX episode_group_id FOR (e:Episodic) ON (e.group_id)` already exists.} {position: None} for query: 'CREATE INDEX episode_group_id IF NOT EXISTS FOR (n:Episodic) ON (n.group_id)'
+2025-10-28 14:32:14,019 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX created_at_entity_index IF NOT EXISTS FOR (e:Entity) ON (e.created_at)` has no effect.} {description: `RANGE INDEX created_at_entity_index FOR (e:Entity) ON (e.created_at)` already exists.} {position: None} for query: 'CREATE INDEX created_at_entity_index IF NOT EXISTS FOR (n:Entity) ON (n.created_at)'
+2025-10-28 14:32:14,019 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX has_member_uuid IF NOT EXISTS FOR ()-[e:HAS_MEMBER]-() ON (e.uuid)` has no effect.} {description: `RANGE INDEX has_member_uuid FOR ()-[e:HAS_MEMBER]-() ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX has_member_uuid IF NOT EXISTS FOR ()-[e:HAS_MEMBER]-() ON (e.uuid)'
+2025-10-28 14:32:14,021 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX name_entity_index IF NOT EXISTS FOR (e:Entity) ON (e.name)` has no effect.} {description: `RANGE INDEX name_entity_index FOR (e:Entity) ON (e.name)` already exists.} {position: None} for query: 'CREATE INDEX name_entity_index IF NOT EXISTS FOR (n:Entity) ON (n.name)'
+2025-10-28 14:32:14,021 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX mention_uuid IF NOT EXISTS FOR ()-[e:MENTIONS]-() ON (e.uuid)` has no effect.} {description: `RANGE INDEX mention_uuid FOR ()-[e:MENTIONS]-() ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX mention_uuid IF NOT EXISTS FOR ()-[e:MENTIONS]-() ON (e.uuid)'
+2025-10-28 14:32:14,022 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX episode_uuid IF NOT EXISTS FOR (e:Episodic) ON (e.uuid)` has no effect.} {description: `RANGE INDEX episode_uuid FOR (e:Episodic) ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX episode_uuid IF NOT EXISTS FOR (n:Episodic) ON (n.uuid)'
+2025-10-28 14:32:14,022 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX relation_uuid IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.uuid)` has no effect.} {description: `RANGE INDEX relation_uuid FOR ()-[e:RELATES_TO]-() ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX relation_uuid IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.uuid)'
+2025-10-28 14:32:14,022 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX entity_uuid IF NOT EXISTS FOR (e:Entity) ON (e.uuid)` has no effect.} {description: `RANGE INDEX entity_uuid FOR (e:Entity) ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX entity_uuid IF NOT EXISTS FOR (n:Entity) ON (n.uuid)'
+2025-10-28 14:32:14,022 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX mention_group_id IF NOT EXISTS FOR ()-[e:MENTIONS]-() ON (e.group_id)` has no effect.} {description: `RANGE INDEX mention_group_id FOR ()-[e:MENTIONS]-() ON (e.group_id)` already exists.} {position: None} for query: 'CREATE INDEX mention_group_id IF NOT EXISTS FOR ()-[e:MENTIONS]-() ON (e.group_id)'
+2025-10-28 14:32:14,023 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX community_uuid IF NOT EXISTS FOR (e:Community) ON (e.uuid)` has no effect.} {description: `RANGE INDEX community_uuid FOR (e:Community) ON (e.uuid)` already exists.} {position: None} for query: 'CREATE INDEX community_uuid IF NOT EXISTS FOR (n:Community) ON (n.uuid)'
+2025-10-28 14:32:14,023 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX relation_group_id IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.group_id)` has no effect.} {description: `RANGE INDEX relation_group_id FOR ()-[e:RELATES_TO]-() ON (e.group_id)` already exists.} {position: None} for query: 'CREATE INDEX relation_group_id IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.group_id)'
+2025-10-28 14:32:14,023 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX created_at_episodic_index IF NOT EXISTS FOR (e:Episodic) ON (e.created_at)` has no effect.} {description: `RANGE INDEX created_at_episodic_index FOR (e:Episodic) ON (e.created_at)` already exists.} {position: None} for query: 'CREATE INDEX created_at_episodic_index IF NOT EXISTS FOR (n:Episodic) ON (n.created_at)'
+2025-10-28 14:32:14,025 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX valid_at_episodic_index IF NOT EXISTS FOR (e:Episodic) ON (e.valid_at)` has no effect.} {description: `RANGE INDEX valid_at_episodic_index FOR (e:Episodic) ON (e.valid_at)` already exists.} {position: None} for query: 'CREATE INDEX valid_at_episodic_index IF NOT EXISTS FOR (n:Episodic) ON (n.valid_at)'
+2025-10-28 14:32:14,025 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX name_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.name)` has no effect.} {description: `RANGE INDEX name_edge_index FOR ()-[e:RELATES_TO]-() ON (e.name)` already exists.} {position: None} for query: 'CREATE INDEX name_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.name)'
+2025-10-28 14:32:14,025 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX expired_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.expired_at)` has no effect.} {description: `RANGE INDEX expired_at_edge_index FOR ()-[e:RELATES_TO]-() ON (e.expired_at)` already exists.} {position: None} for query: 'CREATE INDEX expired_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.expired_at)'
+2025-10-28 14:32:14,026 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX created_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.created_at)` has no effect.} {description: `RANGE INDEX created_at_edge_index FOR ()-[e:RELATES_TO]-() ON (e.created_at)` already exists.} {position: None} for query: 'CREATE INDEX created_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.created_at)'
+2025-10-28 14:32:14,028 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX valid_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.valid_at)` has no effect.} {description: `RANGE INDEX valid_at_edge_index FOR ()-[e:RELATES_TO]-() ON (e.valid_at)` already exists.} {position: None} for query: 'CREATE INDEX valid_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.valid_at)'
+2025-10-28 14:32:14,029 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE RANGE INDEX invalid_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.invalid_at)` has no effect.} {description: `RANGE INDEX invalid_at_edge_index FOR ()-[e:RELATES_TO]-() ON (e.invalid_at)` already exists.} {position: None} for query: 'CREATE INDEX invalid_at_edge_index IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON (e.invalid_at)'
+2025-10-28 14:32:14,030 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE FULLTEXT INDEX community_name IF NOT EXISTS FOR (e:Community) ON EACH [e.name, e.group_id]` has no effect.} {description: `FULLTEXT INDEX community_name FOR (e:Community) ON EACH [e.name, e.group_id]` already exists.} {position: None} for query: 'CREATE FULLTEXT INDEX community_name IF NOT EXISTS \n            FOR (n:Community) ON EACH [n.name, n.group_id]'
+2025-10-28 14:32:14,030 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE FULLTEXT INDEX node_name_and_summary IF NOT EXISTS FOR (e:Entity) ON EACH [e.name, e.summary, e.group_id]` has no effect.} {description: `FULLTEXT INDEX node_name_and_summary FOR (e:Entity) ON EACH [e.name, e.summary, e.group_id]` already exists.} {position: None} for query: 'CREATE FULLTEXT INDEX node_name_and_summary IF NOT EXISTS \n            FOR (n:Entity) ON EACH [n.name, n.summary, n.group_id]'
+2025-10-28 14:32:14,030 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE FULLTEXT INDEX edge_name_and_fact IF NOT EXISTS FOR ()-[e:RELATES_TO]-() ON EACH [e.name, e.fact, e.group_id]` has no effect.} {description: `FULLTEXT INDEX edge_name_and_fact FOR ()-[e:RELATES_TO]-() ON EACH [e.name, e.fact, e.group_id]` already exists.} {position: None} for query: 'CREATE FULLTEXT INDEX edge_name_and_fact IF NOT EXISTS \n            FOR ()-[e:RELATES_TO]-() ON EACH [e.name, e.fact, e.group_id]'
+2025-10-28 14:32:14,030 - neo4j.notifications - INFO - Received notification from DBMS server: {severity: INFORMATION} {code: Neo.ClientNotification.Schema.IndexOrConstraintAlreadyExists} {category: SCHEMA} {title: `CREATE FULLTEXT INDEX episode_content IF NOT EXISTS FOR (e:Episodic) ON EACH [e.content, e.source, e.source_description, e.group_id]` has no effect.} {description: `FULLTEXT INDEX episode_content FOR (e:Episodic) ON EACH [e.content, e.source, e.source_description, e.group_id]` already exists.} {position: None} for query: 'CREATE FULLTEXT INDEX episode_content IF NOT EXISTS \n            FOR (e:Episodic) ON EACH [e.content, e.source, e.source_description, e.group_id]'
+2025-10-28 14:32:14,031 - tenant_graphiti_client - INFO - TenantGraphitiClient initialized successfully with optimized LLM: gemini-2.5-flash
+2025-10-28 14:32:24,833 - tenant_manager - INFO - Starting tenant creation for: x ()
+2025-10-28 14:32:24,833 - tenant_manager - INFO - Creating Neon project for tenant: e9c2fadc-ba47-4503-8ad1-1ab1d5bf07f6
+2025-10-28 14:32:24,834 - neon_project_manager - INFO - Creating Neon project for tenant: x -> tenant-x
+2025-10-28 14:32:24,834 - neon_project_manager - INFO - Using confirmed organization ID: org-divine-leaf-04179575
+2025-10-28 14:32:25,954 - httpx - INFO - HTTP Request: POST https://console.neon.tech/api/v2/projects "HTTP/1.1 201 Created"
+2025-10-28 14:32:25,955 - neon_project_manager - INFO - Getting connection details for project tiny-tree-21454941...
+2025-10-28 14:32:28,275 - httpx - INFO - HTTP Request: GET https://console.neon.tech/api/v2/projects/tiny-tree-21454941/branches "HTTP/1.1 200 OK"
+2025-10-28 14:32:28,678 - httpx - INFO - HTTP Request: GET https://console.neon.tech/api/v2/projects/tiny-tree-21454941/connection_uri?branch_id=br-young-butterfly-adbxy525&role_name=neondb_owner&database_name=neondb "HTTP/1.1 200 OK"
+2025-10-28 14:32:28,680 - neon_project_manager - INFO - Successfully created Neon project: tiny-tree-21454941 for tenant: x
+2025-10-28 14:32:28,680 - tenant_manager - INFO - Initializing database schema for tenant: e9c2fadc-ba47-4503-8ad1-1ab1d5bf07f6
+2025-10-28 14:32:28,680 - tenant_schema_initializer - INFO - Initializing tenant database schema
+2025-10-28 14:32:32,708 - tenant_schema_initializer - INFO - Successfully initialized tenant database schema
+2025-10-28 14:32:33,020 - tenant_manager - INFO - Storing tenant mapping in catalog for: e9c2fadc-ba47-4503-8ad1-1ab1d5bf07f6
+2025-10-28 14:32:33,425 - catalog_database - INFO - Created tenant project mapping: ce9c61a5-8bba-49bb-9523-fb69ec0f4afc -> tiny-tree-21454941
+2025-10-28 14:32:33,540 - tenant_manager - INFO - Initializing Graphiti namespace for tenant: e9c2fadc-ba47-4503-8ad1-1ab1d5bf07f6
+2025-10-28 14:32:33,540 - tenant_manager - INFO - Initializing Graphiti namespace for tenant: ce9c61a5-8bba-49bb-9523-fb69ec0f4afc
+2025-10-28 14:32:33,654 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:32:36,552 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:32:37,350 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:32:41,865 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:32:41,870 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:32:43,897 - graphiti_core.graphiti - INFO - Completed add_episode in 10356.303215026855 ms
+2025-10-28 14:32:43,897 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_ce9c61a5-8bba-49bb-9523-fb69ec0f4afc_c6fafacd_1761642153' for tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc (namespace: tenant_ce9c61a5-8bba-49bb-9523-fb69ec0f4afc)
+2025-10-28 14:32:43,898 - tenant_manager - INFO - Successfully initialized Graphiti namespace for tenant: ce9c61a5-8bba-49bb-9523-fb69ec0f4afc
+2025-10-28 14:32:43,898 - tenant_manager - INFO - Successfully created tenant: ce9c61a5-8bba-49bb-9523-fb69ec0f4afc with Neon project: tiny-tree-21454941
+2025-10-28 14:33:11,647 - auth_middleware - INFO - Created access token for tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc
+2025-10-28 14:33:46,955 - interactive_multi_tenant_api - INFO - Document upload for tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc: temporal_rag_test_story.md -> vector database + knowledge graph
+2025-10-28 14:33:46,956 - tenant_data_ingestion_service - INFO - Starting document ingestion for tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc: temporal_rag_test_story.md
+2025-10-28 14:33:46,956 - tenant_data_ingestion_service - INFO - Ingestion options: vector database + knowledge graph
+2025-10-28 14:33:49,815 - tenant_data_ingestion_service - INFO - Creating chunks for document: temporal_rag_test_story.md
+2025-10-28 14:33:49,817 - tenant_data_ingestion_service - INFO - Generating embeddings for 4 chunks
+2025-10-28 14:33:49,817 - ingestion.embedder - INFO - Generating embeddings for 4 chunks
+2025-10-28 14:33:50,572 - ingestion.embedder - INFO - Processed batch 1/1
+2025-10-28 14:33:50,572 - ingestion.embedder - INFO - Generated embeddings for 4 chunks (model: embedding-001, dimensions: 768)
+2025-10-28 14:33:55,555 - tenant_data_ingestion_service - INFO - Created 4 chunks for document 7e731a86-a9e2-4ac1-aead-683037f67957 (4 with valid embeddings, 0 without)
+2025-10-28 14:33:55,819 - tenant_data_ingestion_service - INFO - Vector ingestion: Created 4 chunks with embeddings
+2025-10-28 14:33:55,820 - tenant_graphiti_client - INFO - Adding 4 chunks to tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc graph namespace: tenant_ce9c61a5-8bba-49bb-9523-fb69ec0f4afc
+2025-10-28 14:33:55,820 - tenant_graphiti_client - INFO - Starting batch processing of 2 episodes for tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc
+2025-10-28 14:33:55,820 - tenant_graphiti_client - INFO - Processing batch 1/1 (2 episodes)
+2025-10-28 14:33:55,854 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:04,071 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:05,012 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,746 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,752 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,757 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,762 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,764 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,767 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,769 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,771 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,774 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,775 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,778 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,781 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,785 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:34,788 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:34:37,814 - graphiti_core.graphiti - INFO - Completed add_episode in 41993.42489242554 ms
+2025-10-28 14:34:37,814 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_ce9c61a5-8bba-49bb-9523-fb69ec0f4afc_82e83ca9_1761642235' for tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc (namespace: tenant_ce9c61a5-8bba-49bb-9523-fb69ec0f4afc)
+2025-10-28 14:34:37,818 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:40:49,779 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
+2025-10-28 14:40:49,780 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
   {
     "parts": [
       {
@@ -108,37 +119,19 @@
         "code_execution_result": null,
         "executable_code": null,
         "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        []\n        \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'interactive_multi_tenant_cli_http.py', 'summary': '', 'entity_types': ['Entity'], 'attributes': {}}\n        </ENTITY>\n        "
+        "text": "\n<TEXT>\nDocument: temporal_rag_test_story.md Section 1: Her Mumbai go-to place is **Blue Tokai, Bandra**. ### \ud83d\udcc5 January 2025 - Aanya switches to **Pixel 9 Pro** as she becomes interested in AI-first devices. - Apple is no longer her preferred brand\u2014she now leans toward **Google\u2019s ecosystem**. - She moves fully to **Hyderabad**. - She now prefers **Trello** for personal projects, while her teams still use Jira and Linear. - She mentors a group of interns, one of whom, **Rahul Mehta**, prefers **One UI over Pixel UI**. ### \ud83d\udcc5 July 2025 - Aanya joins **Cerebro AI** as **Chief Product Officer**. - She now oversees: - **Infra Team** (uses Jira) - **ML Research Team** (uses GitHub Projects) - **AI Product Team** (uses Notion again) - She reverts to **iPhone 16** due to better integration with her Mac. - Section 2: Her preferred coffee shop is now **Sonder Coffee, HSR Layout** when she\u2019s in Bangalore for board meetings. ---\n</TEXT>\n<ENTITY TYPES>\n[{'entity_type_id': 0, 'entity_type_name': 'Entity', 'entity_type_description': 'Default entity classification. Use this entity type if the entity is not one of the other listed types.'}]\n</ENTITY TYPES>\n\nGiven the above text, extract entities from the TEXT that are explicitly or implicitly mentioned.\nFor each entity extracted, also determine its entity type based on the provided ENTITY TYPES and their descriptions.\nIndicate the classified entity type by providing its entity_type_id.\n\n\n\nGuidelines:\n1. Extract significant entities, concepts, or actors mentioned in the conversation.\n2. Avoid creating nodes for relationships or actions.\n3. Avoid creating nodes for temporal information like dates, times or years (these will be added to edges later).\n4. Be as explicit as possible in your node names, using full names and avoiding abbreviations.\n"
       }
     ],
     "role": "user"
   }
 ]
-Raw output: ```json
-{"properties": {"summary": "The `interactive_multi_tenant_cli_http.py` file has been updated to enhance the upload menu with selective ingestion options. Users can now choose between ingesting data to a Vector Database only (fast, for search), Knowledge Graph only (slower, for relationship analysis), or both (complete ingestion, recommended). The changes include adding time estimates for each option and improving error handling for timeouts. These modifications are part of the multi-tenant CLI's new support for selective ingestion options."}, "required": ["summary"], "title": "EntityAttributes_4f33795bf56a4f698f4ea29699b8ad24", "type": "object"}
-```
+Raw output: {"extracted_entities": [{"name": "Blue Tokai, Bandra", "entity_type_id": 0}, {"name": "Aanya", "entity_type_id": 0}, {"name": "Pixel 9 Pro", "entity_type_id": 0}, {"name": "Apple", "entity_type_id": 0}, {"name": "Google\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\... (truncated) ...n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
-2025-09-17 15:52:49,730 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 15:52:49,731 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 15:52:49,731 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:51,883 - graphiti_core.graphiti - INFO - Completed add_episode in 12629.034996032715 ms
-2025-09-17 15:52:51,883 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_9cec6639-d2b0-4654-9095-0ce807b3211c_f7d8fc25_1758104559' for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c)
-2025-09-17 15:52:51,886 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:53,507 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:54,140 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:57,599 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:57,603 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:57,608 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:57,613 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:57,616 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:57,619 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:58,334 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:58,336 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:58,339 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:58,341 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:58,343 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:59,738 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 15:52:59,738 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
+2025-10-28 14:40:49,781 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Unterminated string starting at: line 1 column 213 (char 212)
+2025-10-28 14:40:49,781 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
+2025-10-28 14:40:49,783 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2025-10-28 14:47:03,127 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
+2025-10-28 14:47:03,129 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
   {
     "parts": [
       {
@@ -151,340 +144,11 @@ Raw output: ```json
         "code_execution_result": null,
         "executable_code": null,
         "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        [\n  \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\"\n]\n        \"Document: INGESTION_OPTIONS_README.md Section 2: - Updated `/documents` endpoint to accept ingestion preferences - Added validation for option selection ### 4. Core Logic (`tenant_data_ingestion_service.py`) - Modified ingestion workflow to conditionally process based on options - Enhanced logging for transparency ## Usage When uploading a document via CLI (option 4): ``` \\ud83d\\udee0\\ufe0f Ingestion Options Choose what to ingest into: 1. \\ud83d\\uddc3\\ufe0f Vector Database only (typically 10-30 seconds) 2. \\ud83d\\udd78\\ufe0f Knowledge Graph only (may take 1-2 minutes) 3. \\ud83d\\ude80 Both Vector DB + Knowledge Graph (may take 1-3 minutes) ``` ## Performance Impact - **Vector only**: ~10-30 seconds (embeddings + vector storage) - **Graph only**: ~1-2 minutes (entity extraction + relationship building) - **Both**: ~1-3 minutes (complete processing) Source: api_upload\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'INGESTION_OPTIONS_README.md', 'summary': '', 'entity_types': ['Entity'], 'attributes': {}}\n        </ENTITY>\n        "
+        "text": "\n<TEXT>\nDocument: temporal_rag_test_story.md Section 1: Her Mumbai go-to place is **Blue Tokai, Bandra**. ### \ud83d\udcc5 January 2025 - Aanya switches to **Pixel 9 Pro** as she becomes interested in AI-first devices. - Apple is no longer her preferred brand\u2014she now leans toward **Google\u2019s ecosystem**. - She moves fully to **Hyderabad**. - She now prefers **Trello** for personal projects, while her teams still use Jira and Linear. - She mentors a group of interns, one of whom, **Rahul Mehta**, prefers **One UI over Pixel UI**. ### \ud83d\udcc5 July 2025 - Aanya joins **Cerebro AI** as **Chief Product Officer**. - She now oversees: - **Infra Team** (uses Jira) - **ML Research Team** (uses GitHub Projects) - **AI Product Team** (uses Notion again) - She reverts to **iPhone 16** due to better integration with her Mac. - Section 2: Her preferred coffee shop is now **Sonder Coffee, HSR Layout** when she\u2019s in Bangalore for board meetings. ---\n</TEXT>\n<ENTITY TYPES>\n[{'entity_type_id': 0, 'entity_type_name': 'Entity', 'entity_type_description': 'Default entity classification. Use this entity type if the entity is not one of the other listed types.'}]\n</ENTITY TYPES>\n\nGiven the above text, extract entities from the TEXT that are explicitly or implicitly mentioned.\nFor each entity extracted, also determine its entity type based on the provided ENTITY TYPES and their descriptions.\nIndicate the classified entity type by providing its entity_type_id.\n\n\n\nGuidelines:\n1. Extract significant entities, concepts, or actors mentioned in the conversation.\n2. Avoid creating nodes for relationships or actions.\n3. Avoid creating nodes for temporal information like dates, times or years (these will be added to edges later).\n4. Be as explicit as possible in your node names, using full names and avoiding abbreviations.\n"
       }
     ],
     "role": "user"
-  }
-]
-Raw output: ```json
-{
-  "summary": "The INGESTION_OPTIONS_README.md document details new selective ingestion options for a multi-tenant CLI. Users can now choose to ingest data into the Vector Database only (fast, for search), the Knowledge Graph only (slower, for relationship analysis), or both (complete ingestion, recommended). This feature was implemented by adding `ingest_vector` and `ingest_graph` fields to the `DocumentInput` data model, enhancing the CLI upload menu with these options and time estimates, updating the `/documents` API endpoint to accept ingestion preferences, and modifying the core ingestion logic to conditionally process data. Performance estimates range from 10-30 seconds for Vector only, 1-2 minutes for Graph only, and 1-3 minutes for both."
-}
-```
-
-2025-09-17 15:52:59,739 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 15:52:59,739 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 15:52:59,740 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:52:59,788 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 15:52:59,789 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
-  {
-    "parts": [
-      {
-        "video_metadata": null,
-        "thought": null,
-        "inline_data": null,
-        "file_data": null,
-        "thought_signature": null,
-        "function_call": null,
-        "code_execution_result": null,
-        "executable_code": null,
-        "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        [\n  \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\"\n]\n        \"Document: INGESTION_OPTIONS_README.md Section 2: - Updated `/documents` endpoint to accept ingestion preferences - Added validation for option selection ### 4. Core Logic (`tenant_data_ingestion_service.py`) - Modified ingestion workflow to conditionally process based on options - Enhanced logging for transparency ## Usage When uploading a document via CLI (option 4): ``` \\ud83d\\udee0\\ufe0f Ingestion Options Choose what to ingest into: 1. \\ud83d\\uddc3\\ufe0f Vector Database only (typically 10-30 seconds) 2. \\ud83d\\udd78\\ufe0f Knowledge Graph only (may take 1-2 minutes) 3. \\ud83d\\ude80 Both Vector DB + Knowledge Graph (may take 1-3 minutes) ``` ## Performance Impact - **Vector only**: ~10-30 seconds (embeddings + vector storage) - **Graph only**: ~1-2 minutes (entity extraction + relationship building) - **Both**: ~1-3 minutes (complete processing) Source: api_upload\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'Vector Database', 'summary': 'The multi-tenant CLI now supports selective ingestion options. Users can choose between ingesting only to a Vector Database for fast search capabilities, only to a Knowledge Graph for slower relationship analysis, or both for complete ingestion. This is achieved by adding `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` in `tenant_ingestion_models.py`. The CLI interface in `interactive_multi_tenant_cli_http.py` has been updated with these options, including time estimates and improved error handling. The API endpoint in `interactive_multi_tenant_api.py` also supports these changes.', 'entity_types': ['Entity'], 'attributes': {'labels': ['Entity']}}\n        </ENTITY>\n        "
-      }
-    ],
-    "role": "user"
-  }
-]
-Raw output: ```json
-{
-  "summary": "The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: Vector Database only (fast ingestion for search), Knowledge Graph only (slower ingestion for relationship analysis), or Both (complete ingestion, recommended). This feature was implemented by adding `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` in `tenant_ingestion_models.py`. The CLI interface (`interactive_multi_tenant_cli_http.py`) and API endpoint (`interactive_multi_tenant_api.py`) have been updated to include these options, with time estimates and improved error handling. The core logic in `tenant_data_ingestion_service.py` was modified to conditionally process data based on the selected options. Performance estimates indicate Vector only takes ~10-30 seconds, Graph only ~1-2 minutes, and Both ~1-3 minutes."
-}
-```
-
-2025-09-17 15:52:59,789 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 15:52:59,789 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 15:52:59,790 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:04,232 - graphiti_core.graphiti - INFO - Completed add_episode in 12349.342107772827 ms
-2025-09-17 15:53:04,233 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_9cec6639-d2b0-4654-9095-0ce807b3211c_ab8bec69_1758104571' for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c)
-2025-09-17 15:53:04,237 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:06,367 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:08,288 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,396 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,400 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,403 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,406 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,409 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,412 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,415 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,417 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,420 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,422 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,426 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:11,428 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:13,445 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 15:53:13,446 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
-  {
-    "parts": [
-      {
-        "video_metadata": null,
-        "thought": null,
-        "inline_data": null,
-        "file_data": null,
-        "thought_signature": null,
-        "function_call": null,
-        "code_execution_result": null,
-        "executable_code": null,
-        "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        [\n  \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 2: - Updated `/documents` endpoint to accept ingestion preferences - Added validation for option selection ### 4. Core Logic (`tenant_data_ingestion_service.py`) - Modified ingestion workflow to conditionally process based on options - Enhanced logging for transparency ## Usage When uploading a document via CLI (option 4): ``` \\ud83d\\udee0\\ufe0f Ingestion Options Choose what to ingest into: 1. \\ud83d\\uddc3\\ufe0f Vector Database only (typically 10-30 seconds) 2. \\ud83d\\udd78\\ufe0f Knowledge Graph only (may take 1-2 minutes) 3. \\ud83d\\ude80 Both Vector DB + Knowledge Graph (may take 1-3 minutes) ``` ## Performance Impact - **Vector only**: ~10-30 seconds (embeddings + vector storage) - **Graph only**: ~1-2 minutes (entity extraction + relationship building) - **Both**: ~1-3 minutes (complete processing) Source: api_upload\"\n]\n        \"Document: INGESTION_OPTIONS_README.md Section 3: ## Technical Details The implementation ensures: - Document metadata is always stored regardless of options - Vector ingestion creates chunks with embeddings for search - Graph ingestion creates episodes for relationship analysis - Proper error handling and rollback on failures - Backward compatibility with existing code ## Benefits 1. **Faster ingestion** when only search is needed 2. **Reduced resource usage** for simple use cases 3. **User choice** based on their specific requirements 4. **Better user experience** with clear options and time estimates Source: api_upload\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'search', 'summary': '', 'entity_types': ['Entity'], 'attributes': {}}\n        </ENTITY>\n        "
-      }
-    ],
-    "role": "user"
-  }
-]
-Raw output: ```json
-{"properties": {"summary": "The multi-tenant CLI now supports selective ingestion options, allowing users to choose between Vector Database only, Knowledge Graph only, or both. This feature enhances the CLI by adding `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput`, updating the upload menu with ingestion options and time estimates, and modifying the `/documents` API endpoint to accept ingestion preferences. The core logic has been adjusted to conditionally process data based on selected options, with improved logging and error handling. Performance impacts vary: Vector only takes 10-30 seconds, Graph only takes 1-2 minutes, and both take 1-3 minutes. This provides faster ingestion for search-only needs, reduced resource usage, and user choice based on specific requirements."}, "required": ["summary"]}
-```
-
-2025-09-17 15:53:13,446 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 15:53:13,446 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 15:53:13,447 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 15:53:23,560 - graphiti_core.graphiti - INFO - Completed add_episode in 19326.762199401855 ms
-2025-09-17 15:53:23,560 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_9cec6639-d2b0-4654-9095-0ce807b3211c_a01bfac6_1758104584' for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c)
-2025-09-17 15:53:23,560 - tenant_graphiti_client - INFO - Batch completed: 3/3 episodes for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 15:53:23,560 - tenant_data_ingestion_service - INFO - Successfully added 3 episodes to tenant 9cec6639-d2b0-4654-9095-0ce807b3211c graph namespace
-2025-09-17 15:53:23,560 - tenant_data_ingestion_service - INFO - Graph ingestion: Created episode 3
-2025-09-17 15:53:23,560 - tenant_data_ingestion_service - INFO - Successfully ingested document 11535e98-826a-4741-9147-8de9ff1a5adc for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c in 56262.32ms
-2025-09-17 16:05:29,763 - interactive_multi_tenant_api - INFO - Document upload for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: temporal_rag_test_story.md -> vector database + knowledge graph
-2025-09-17 16:05:29,764 - tenant_data_ingestion_service - INFO - Starting document ingestion for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: temporal_rag_test_story.md
-2025-09-17 16:05:29,764 - tenant_data_ingestion_service - INFO - Ingestion options: vector database + knowledge graph
-2025-09-17 16:05:33,347 - tenant_data_ingestion_service - INFO - Creating chunks for document: temporal_rag_test_story.md
-2025-09-17 16:05:33,348 - tenant_data_ingestion_service - INFO - Generating embeddings for 4 chunks
-2025-09-17 16:05:33,348 - ingestion.embedder - INFO - Generating embeddings for 4 chunks
-2025-09-17 16:05:34,043 - ingestion.embedder - INFO - Processed batch 1/1
-2025-09-17 16:05:34,043 - ingestion.embedder - INFO - Generated embeddings for 4 chunks (model: embedding-001, dimensions: 768)
-2025-09-17 16:05:40,103 - tenant_data_ingestion_service - INFO - Created 4 chunks for document f7cf8e9a-8e62-430a-bf71-a29292d3c372 (4 with valid embeddings, 0 without)
-2025-09-17 16:05:40,523 - tenant_data_ingestion_service - INFO - Vector ingestion: Created 4 chunks with embeddings
-2025-09-17 16:05:40,524 - tenant_graphiti_client - INFO - Adding 4 chunks to tenant 9cec6639-d2b0-4654-9095-0ce807b3211c graph namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:05:40,525 - tenant_graphiti_client - INFO - Starting batch processing of 2 episodes for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:05:40,525 - tenant_graphiti_client - INFO - Processing batch 1/1 (2 episodes)
-2025-09-17 16:05:40,546 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:43,096 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:45,077 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,030 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,032 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,034 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,036 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,038 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,040 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,042 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,044 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,046 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,048 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,050 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,052 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,054 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:52,056 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:54,282 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 16:05:54,282 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
-  {
-    "parts": [
-      {
-        "video_metadata": null,
-        "thought": null,
-        "inline_data": null,
-        "file_data": null,
-        "thought_signature": null,
-        "function_call": null,
-        "code_execution_result": null,
-        "executable_code": null,
-        "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        [\n  \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 2: - Updated `/documents` endpoint to accept ingestion preferences - Added validation for option selection ### 4. Core Logic (`tenant_data_ingestion_service.py`) - Modified ingestion workflow to conditionally process based on options - Enhanced logging for transparency ## Usage When uploading a document via CLI (option 4): ``` \\ud83d\\udee0\\ufe0f Ingestion Options Choose what to ingest into: 1. \\ud83d\\uddc3\\ufe0f Vector Database only (typically 10-30 seconds) 2. \\ud83d\\udd78\\ufe0f Knowledge Graph only (may take 1-2 minutes) 3. \\ud83d\\ude80 Both Vector DB + Knowledge Graph (may take 1-3 minutes) ``` ## Performance Impact - **Vector only**: ~10-30 seconds (embeddings + vector storage) - **Graph only**: ~1-2 minutes (entity extraction + relationship building) - **Both**: ~1-3 minutes (complete processing) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 3: ## Technical Details The implementation ensures: - Document metadata is always stored regardless of options - Vector ingestion creates chunks with embeddings for search - Graph ingestion creates episodes for relationship analysis - Proper error handling and rollback on failures - Backward compatibility with existing code ## Benefits 1. **Faster ingestion** when only search is needed 2. **Reduced resource usage** for simple use cases 3. **User choice** based on their specific requirements 4. **Better user experience** with clear options and time estimates Source: api_upload\"\n]\n        \"Document: temporal_rag_test_story.md Section 1: # \\ud83d\\udcda Temporal Knowledge Story for RAG Testing ## \\ud83e\\udde0 Story: The Life and Choices of Aanya Sharma (2023\\u20132025) ### \\ud83d\\udcc5 December 2023 - Aanya Sharma is a product manager at **Zyphos Tech**, living in **Bangalore**. - She prefers **Android phones**. Her favorite phone is the **OnePlus 11R**. - She is using **Notion** as her preferred note-taking app. - She uses **Slack** for team collaboration. - Her favorite coffee shop is **Third Wave Coffee, Indiranagar**. ### \\ud83d\\udcc5 February 2024 - Aanya moves to **Hyderabad** for a project. - She discovers and starts preferring **Samsung Galaxy Z Fold 5** over OnePlus. - She starts using **Obsidian** instead of Notion due to better knowledge graphing. - Her favorite caf\\u00e9 becomes **Roastery Coffee House** in Hyderabad. - Section 2: Slack is replaced by **Microsoft Teams** in her organization. ### \\ud83d\\udcc5 June 2024 - Aanya buys an **iPhone 15 Pro Max** after being influenced by her designer friends.\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'Aanya Sharma', 'summary': '', 'entity_types': ['Entity'], 'attributes': {}}\n        </ENTITY>\n        "
-      }
-    ],
-    "role": "user"
-  }
-]
-Raw output: ```json
-{"properties": {"summary": "Aanya Sharma is a product manager at Zyphos Tech. In December 2023, she lived in Bangalore and preferred Android phones, specifically the OnePlus 11R. She used Notion for notes and Slack for collaboration, with Third Wave Coffee in Indiranagar as her favorite coffee shop. By February 2024, she had moved to Hyderabad for a project, switched to a Samsung Galaxy Z Fold 5, and began using Obsidian instead of Notion. Her favorite cafe in Hyderabad was Roastery Coffee House, and her organization replaced Slack with Microsoft Teams. In June 2024, Aanya purchased an iPhone 15 Pro Max."}, "required": ["summary"]}
-```
-
-2025-09-17 16:05:54,283 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 16:05:54,283 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 16:05:54,284 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:05:57,107 - graphiti_core.graphiti - INFO - Completed add_episode in 16581.429958343506 ms
-2025-09-17 16:05:57,107 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_9cec6639-d2b0-4654-9095-0ce807b3211c_f059ec79_1758105340' for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c)
-2025-09-17 16:05:57,172 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:00,393 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:01,856 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,299 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,304 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,308 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,312 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,317 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,320 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,324 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,327 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,331 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,334 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,337 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,340 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,343 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,346 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,348 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,350 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,353 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,355 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,357 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:09,360 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,321 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,582 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,584 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,587 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,589 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,591 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,596 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,598 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,600 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,602 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,604 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:10,927 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 16:06:10,927 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
-  {
-    "parts": [
-      {
-        "video_metadata": null,
-        "thought": null,
-        "inline_data": null,
-        "file_data": null,
-        "thought_signature": null,
-        "function_call": null,
-        "code_execution_result": null,
-        "executable_code": null,
-        "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        [\n  \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 2: - Updated `/documents` endpoint to accept ingestion preferences - Added validation for option selection ### 4. Core Logic (`tenant_data_ingestion_service.py`) - Modified ingestion workflow to conditionally process based on options - Enhanced logging for transparency ## Usage When uploading a document via CLI (option 4): ``` \\ud83d\\udee0\\ufe0f Ingestion Options Choose what to ingest into: 1. \\ud83d\\uddc3\\ufe0f Vector Database only (typically 10-30 seconds) 2. \\ud83d\\udd78\\ufe0f Knowledge Graph only (may take 1-2 minutes) 3. \\ud83d\\ude80 Both Vector DB + Knowledge Graph (may take 1-3 minutes) ``` ## Performance Impact - **Vector only**: ~10-30 seconds (embeddings + vector storage) - **Graph only**: ~1-2 minutes (entity extraction + relationship building) - **Both**: ~1-3 minutes (complete processing) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 3: ## Technical Details The implementation ensures: - Document metadata is always stored regardless of options - Vector ingestion creates chunks with embeddings for search - Graph ingestion creates episodes for relationship analysis - Proper error handling and rollback on failures - Backward compatibility with existing code ## Benefits 1. **Faster ingestion** when only search is needed 2. **Reduced resource usage** for simple use cases 3. **User choice** based on their specific requirements 4. **Better user experience** with clear options and time estimates Source: api_upload\",\n  \"Document: temporal_rag_test_story.md Section 1: # \\ud83d\\udcda Temporal Knowledge Story for RAG Testing ## \\ud83e\\udde0 Story: The Life and Choices of Aanya Sharma (2023\\u20132025) ### \\ud83d\\udcc5 December 2023 - Aanya Sharma is a product manager at **Zyphos Tech**, living in **Bangalore**. - She prefers **Android phones**. Her favorite phone is the **OnePlus 11R**. - She is using **Notion** as her preferred note-taking app. - She uses **Slack** for team collaboration. - Her favorite coffee shop is **Third Wave Coffee, Indiranagar**. ### \\ud83d\\udcc5 February 2024 - Aanya moves to **Hyderabad** for a project. - She discovers and starts preferring **Samsung Galaxy Z Fold 5** over OnePlus. - She starts using **Obsidian** instead of Notion due to better knowledge graphing. - Her favorite caf\\u00e9 becomes **Roastery Coffee House** in Hyderabad. - Section 2: Slack is replaced by **Microsoft Teams** in her organization. ### \\ud83d\\udcc5 June 2024 - Aanya buys an **iPhone 15 Pro Max** after being influenced by her designer friends.\"\n]\n        \"Document: temporal_rag_test_story.md Section 1: Her Mumbai go-to place is **Blue Tokai, Bandra**. ### \\ud83d\\udcc5 January 2025 - Aanya switches to **Pixel 9 Pro** as she becomes interested in AI-first devices. - Apple is no longer her preferred brand\\u2014she now leans toward **Google\\u2019s ecosystem**. - She moves fully to **Hyderabad**. - She now prefers **Trello** for personal projects, while her teams still use Jira and Linear. - She mentors a group of interns, one of whom, **Rahul Mehta**, prefers **One UI over Pixel UI**. ### \\ud83d\\udcc5 July 2025 - Aanya joins **Cerebro AI** as **Chief Product Officer**. - She now oversees: - **Infra Team** (uses Jira) - **ML Research Team** (uses GitHub Projects) - **AI Product Team** (uses Notion again) - She reverts to **iPhone 16** due to better integration with her Mac. - Section 2: Her preferred coffee shop is now **Sonder Coffee, HSR Layout** when she\\u2019s in Bangalore for board meetings. ---\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'Rahul Mehta', 'summary': '', 'entity_types': ['Entity'], 'attributes': {}}\n        </ENTITY>\n        "
-      }
-    ],
-    "role": "user"
-  }
-]
-Raw output: ```json
-{
-  "properties": {
-    "summary": "Rahul Mehta is an individual who prefers One UI over Pixel UI. He is mentored by Aanya Sharma, who is the Chief Product Officer at Cerebro AI as of July 2025."
   },
-  "required": [
-    "summary"
-  ],
-  "title": "EntityAttributes_9721749cf2d54dabb67e5877fc627f5b",
-  "type": "object"
-}
-```
-
-2025-09-17 16:06:10,927 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 16:06:10,927 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 16:06:10,928 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:06:15,217 - graphiti_core.graphiti - INFO - Completed add_episode in 18109.665870666504 ms
-2025-09-17 16:06:15,217 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_9cec6639-d2b0-4654-9095-0ce807b3211c_bf7f61f0_1758105357' for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c)
-2025-09-17 16:06:15,217 - tenant_graphiti_client - INFO - Batch completed: 2/2 episodes for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:06:15,218 - tenant_data_ingestion_service - INFO - Successfully added 2 episodes to tenant 9cec6639-d2b0-4654-9095-0ce807b3211c graph namespace
-2025-09-17 16:06:15,218 - tenant_data_ingestion_service - INFO - Graph ingestion: Created episode 2
-2025-09-17 16:06:15,218 - tenant_data_ingestion_service - INFO - Successfully ingested document f7cf8e9a-8e62-430a-bf71-a29292d3c372 for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c in 45454.01ms
-2025-09-17 16:10:58,916 - multi_tenant_agent - INFO - Using comprehensive system prompt for intelligent tool routing
-2025-09-17 16:10:58,929 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-2025-09-17 16:10:58,966 - multi_tenant_agent - INFO - Created multi-tenant agent with model: gemini-2.0-flash-thinking-exp-1219
-2025-09-17 16:10:58,977 - multi_tenant_agent - INFO - Successfully registered tenant-aware tools
-2025-09-17 16:10:58,977 - multi_tenant_agent - INFO - 🧠 Starting chat processing for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:10:58,978 - multi_tenant_agent - INFO - 📝 User query: Hi! Tell me about aanya sharma coffee shop preferences over time?
-2025-09-17 16:10:58,978 - multi_tenant_agent - INFO - 🤖 Running agent with model gemini-2.0-flash-thinking-exp-1219
-2025-09-17 16:10:58,981 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:11:01,141 - multi_tenant_agent - INFO - 🔍 Graph search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: aanya sharma coffee shop preferences over time
-2025-09-17 16:11:01,913 - tenant_graphiti_client - INFO - Graph search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c) returned 10 results
-2025-09-17 16:11:01,913 - multi_tenant_agent - INFO - ✅ Graph search returned 10 results for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:11:01,915 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:11:05,021 - multi_tenant_agent - INFO - ✅ Agent completed processing for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:11:05,022 - multi_tenant_agent - INFO - 🔍 Extracting tool usage from agent messages
-2025-09-17 16:11:05,022 - multi_tenant_agent - INFO - Found 4 messages to analyze
-2025-09-17 16:11:05,022 - multi_tenant_agent - INFO - Message 0: <class 'pydantic_ai.messages.ModelRequest'>, attributes: ['instructions', 'kind', 'parts', 'user_text_prompt']
-2025-09-17 16:11:05,022 - multi_tenant_agent - INFO - Message 1: <class 'pydantic_ai.messages.ModelResponse'>, attributes: ['kind', 'model_name', 'otel_events', 'parts', 'timestamp', 'usage', 'vendor_details', 'vendor_id']
-2025-09-17 16:11:05,022 - multi_tenant_agent - INFO - Message 2: <class 'pydantic_ai.messages.ModelRequest'>, attributes: ['instructions', 'kind', 'parts', 'user_text_prompt']
-2025-09-17 16:11:05,022 - multi_tenant_agent - INFO - Message 3: <class 'pydantic_ai.messages.ModelResponse'>, attributes: ['kind', 'model_name', 'otel_events', 'parts', 'timestamp', 'usage', 'vendor_details', 'vendor_id']
-2025-09-17 16:11:05,022 - multi_tenant_agent - INFO - 📊 Extracted 0 tools and 0 sources
-2025-09-17 16:11:05,022 - multi_tenant_agent - INFO - 📊 Final result: 1 tools, 0 unique sources
-2025-09-17 16:12:34,845 - multi_tenant_agent - INFO - Using comprehensive system prompt for intelligent tool routing
-2025-09-17 16:12:34,846 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-2025-09-17 16:12:34,890 - multi_tenant_agent - INFO - Created multi-tenant agent with model: gemini-2.0-flash-thinking-exp-1219
-2025-09-17 16:12:34,894 - multi_tenant_agent - INFO - Successfully registered tenant-aware tools
-2025-09-17 16:12:34,894 - multi_tenant_agent - INFO - 🧠 Starting chat processing for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:12:34,894 - multi_tenant_agent - INFO - 📝 User query: Does aanya sharma visited starbucks?
-2025-09-17 16:12:34,894 - multi_tenant_agent - INFO - 🤖 Running agent with model gemini-2.0-flash-thinking-exp-1219
-2025-09-17 16:12:34,895 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:12:38,104 - multi_tenant_agent - INFO - 🔍 Local dual search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: Does aanya sharma visited starbucks?
-2025-09-17 16:12:38,104 - multi_tenant_agent - INFO - 🔍 Vector search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: Does aanya sharma visited starbucks?
-2025-09-17 16:12:43,848 - multi_tenant_agent - INFO - ✅ Vector search returned 4 results for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:12:43,848 - multi_tenant_agent - INFO - 🔍 Graph search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: Does aanya sharma visited starbucks?
-2025-09-17 16:12:44,516 - tenant_graphiti_client - INFO - Graph search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c) returned 10 results
-2025-09-17 16:12:44,516 - multi_tenant_agent - INFO - ✅ Graph search returned 10 results for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:12:44,516 - multi_tenant_agent - INFO - ✅ Local dual search returned 9 combined results
-2025-09-17 16:12:44,517 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:12:46,765 - multi_tenant_agent - INFO - ✅ Agent completed processing for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:12:46,765 - multi_tenant_agent - INFO - 🔍 Extracting tool usage from agent messages
-2025-09-17 16:12:46,765 - multi_tenant_agent - INFO - Found 4 messages to analyze
-2025-09-17 16:12:46,766 - multi_tenant_agent - INFO - Message 0: <class 'pydantic_ai.messages.ModelRequest'>, attributes: ['instructions', 'kind', 'parts', 'user_text_prompt']
-2025-09-17 16:12:46,766 - multi_tenant_agent - INFO - Message 1: <class 'pydantic_ai.messages.ModelResponse'>, attributes: ['kind', 'model_name', 'otel_events', 'parts', 'timestamp', 'usage', 'vendor_details', 'vendor_id']
-2025-09-17 16:12:46,766 - multi_tenant_agent - INFO - Message 2: <class 'pydantic_ai.messages.ModelRequest'>, attributes: ['instructions', 'kind', 'parts', 'user_text_prompt']
-2025-09-17 16:12:46,766 - multi_tenant_agent - INFO - Message 3: <class 'pydantic_ai.messages.ModelResponse'>, attributes: ['kind', 'model_name', 'otel_events', 'parts', 'timestamp', 'usage', 'vendor_details', 'vendor_id']
-2025-09-17 16:12:46,766 - multi_tenant_agent - INFO - 📊 Extracted 0 tools and 0 sources
-2025-09-17 16:12:46,766 - multi_tenant_agent - INFO - 📊 Using tracked tools: ['Vector Search', 'Knowledge Graph Search', 'Dual Storage Search']
-2025-09-17 16:12:46,766 - multi_tenant_agent - INFO - 📊 Using tracked sources: 5 sources
-2025-09-17 16:12:46,766 - multi_tenant_agent - INFO - 📊 Final result: 3 tools, 2 unique sources
-2025-09-17 16:13:35,785 - multi_tenant_agent - INFO - Using comprehensive system prompt for intelligent tool routing
-2025-09-17 16:13:35,786 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-2025-09-17 16:13:35,822 - multi_tenant_agent - INFO - Created multi-tenant agent with model: gemini-2.0-flash-thinking-exp-1219
-2025-09-17 16:13:35,826 - multi_tenant_agent - INFO - Successfully registered tenant-aware tools
-2025-09-17 16:13:35,826 - multi_tenant_agent - INFO - 🧠 Starting chat processing for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:13:35,826 - multi_tenant_agent - INFO - 📝 User query: You: Hi! Tell me about aanya sharma coffee shop preferences over time?
-2025-09-17 16:13:35,826 - multi_tenant_agent - INFO - 🤖 Running agent with model gemini-2.0-flash-thinking-exp-1219
-2025-09-17 16:13:35,829 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:13:41,075 - multi_tenant_agent - INFO - 🔍 Local dual search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: aanya sharma coffee shop preferences over time?
-2025-09-17 16:13:41,075 - multi_tenant_agent - INFO - 🔍 Vector search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: aanya sharma coffee shop preferences over time?
-2025-09-17 16:13:47,238 - multi_tenant_agent - INFO - ✅ Vector search returned 6 results for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:13:47,238 - multi_tenant_agent - INFO - 🔍 Graph search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: aanya sharma coffee shop preferences over time?
-2025-09-17 16:13:47,921 - tenant_graphiti_client - INFO - Graph search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c) returned 10 results
-2025-09-17 16:13:47,921 - multi_tenant_agent - INFO - ✅ Graph search returned 10 results for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:13:47,921 - multi_tenant_agent - INFO - ✅ Local dual search returned 11 combined results
-2025-09-17 16:13:47,922 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:13:53,973 - multi_tenant_agent - INFO - ✅ Agent completed processing for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:13:53,973 - multi_tenant_agent - INFO - 🔍 Extracting tool usage from agent messages
-2025-09-17 16:13:53,973 - multi_tenant_agent - INFO - Found 4 messages to analyze
-2025-09-17 16:13:53,974 - multi_tenant_agent - INFO - Message 0: <class 'pydantic_ai.messages.ModelRequest'>, attributes: ['instructions', 'kind', 'parts', 'user_text_prompt']
-2025-09-17 16:13:53,974 - multi_tenant_agent - INFO - Message 1: <class 'pydantic_ai.messages.ModelResponse'>, attributes: ['kind', 'model_name', 'otel_events', 'parts', 'timestamp', 'usage', 'vendor_details', 'vendor_id']
-2025-09-17 16:13:53,974 - multi_tenant_agent - INFO - Message 2: <class 'pydantic_ai.messages.ModelRequest'>, attributes: ['instructions', 'kind', 'parts', 'user_text_prompt']
-2025-09-17 16:13:53,974 - multi_tenant_agent - INFO - Message 3: <class 'pydantic_ai.messages.ModelResponse'>, attributes: ['kind', 'model_name', 'otel_events', 'parts', 'timestamp', 'usage', 'vendor_details', 'vendor_id']
-2025-09-17 16:13:53,974 - multi_tenant_agent - INFO - 📊 Extracted 0 tools and 0 sources
-2025-09-17 16:13:53,974 - multi_tenant_agent - INFO - 📊 Using tracked tools: ['Vector Search', 'Knowledge Graph Search', 'Dual Storage Search']
-2025-09-17 16:13:53,974 - multi_tenant_agent - INFO - 📊 Using tracked sources: 5 sources
-2025-09-17 16:13:53,974 - multi_tenant_agent - INFO - 📊 Final result: 3 tools, 2 unique sources
-2025-09-17 16:16:13,915 - interactive_multi_tenant_api - INFO - Document upload for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: README.md -> vector database + knowledge graph
-2025-09-17 16:16:13,916 - tenant_data_ingestion_service - INFO - Starting document ingestion for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: README.md
-2025-09-17 16:16:13,916 - tenant_data_ingestion_service - INFO - Ingestion options: vector database + knowledge graph
-2025-09-17 16:16:17,945 - tenant_data_ingestion_service - INFO - Creating chunks for document: README.md
-2025-09-17 16:16:17,956 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-2025-09-17 16:16:17,998 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:00,457 - tenant_data_ingestion_service - INFO - Generating embeddings for 31 chunks
-2025-09-17 16:17:00,457 - ingestion.embedder - INFO - Generating embeddings for 31 chunks
-2025-09-17 16:17:02,545 - ingestion.embedder - INFO - Processed batch 1/1
-2025-09-17 16:17:02,545 - ingestion.embedder - INFO - Generated embeddings for 31 chunks (model: embedding-001, dimensions: 768)
-2025-09-17 16:17:18,786 - tenant_data_ingestion_service - INFO - Created 31 chunks for document 4ed86b82-2305-4247-a90f-e54ca7e51014 (31 with valid embeddings, 0 without)
-2025-09-17 16:17:19,199 - tenant_data_ingestion_service - INFO - Vector ingestion: Created 31 chunks with embeddings
-2025-09-17 16:17:19,208 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-2025-09-17 16:17:19,245 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:52,075 - tenant_graphiti_client - INFO - Adding 30 chunks to tenant 9cec6639-d2b0-4654-9095-0ce807b3211c graph namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:17:52,077 - tenant_graphiti_client - INFO - Starting batch processing of 3 episodes for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:17:52,077 - tenant_graphiti_client - INFO - Processing batch 1/1 (3 episodes)
-2025-09-17 16:17:52,098 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:54,070 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:54,847 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:59,638 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:59,641 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:59,645 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:59,647 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:59,651 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:59,653 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:59,656 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:17:59,659 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:01,191 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 16:18:01,191 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
   {
     "parts": [
       {
@@ -497,192 +161,39 @@ Raw output: ```json
         "code_execution_result": null,
         "executable_code": null,
         "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        [\n  \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 2: - Updated `/documents` endpoint to accept ingestion preferences - Added validation for option selection ### 4. Core Logic (`tenant_data_ingestion_service.py`) - Modified ingestion workflow to conditionally process based on options - Enhanced logging for transparency ## Usage When uploading a document via CLI (option 4): ``` \\ud83d\\udee0\\ufe0f Ingestion Options Choose what to ingest into: 1. \\ud83d\\uddc3\\ufe0f Vector Database only (typically 10-30 seconds) 2. \\ud83d\\udd78\\ufe0f Knowledge Graph only (may take 1-2 minutes) 3. \\ud83d\\ude80 Both Vector DB + Knowledge Graph (may take 1-3 minutes) ``` ## Performance Impact - **Vector only**: ~10-30 seconds (embeddings + vector storage) - **Graph only**: ~1-2 minutes (entity extraction + relationship building) - **Both**: ~1-3 minutes (complete processing) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 3: ## Technical Details The implementation ensures: - Document metadata is always stored regardless of options - Vector ingestion creates chunks with embeddings for search - Graph ingestion creates episodes for relationship analysis - Proper error handling and rollback on failures - Backward compatibility with existing code ## Benefits 1. **Faster ingestion** when only search is needed 2. **Reduced resource usage** for simple use cases 3. **User choice** based on their specific requirements 4. **Better user experience** with clear options and time estimates Source: api_upload\",\n  \"Document: temporal_rag_test_story.md Section 1: # \\ud83d\\udcda Temporal Knowledge Story for RAG Testing ## \\ud83e\\udde0 Story: The Life and Choices of Aanya Sharma (2023\\u20132025) ### \\ud83d\\udcc5 December 2023 - Aanya Sharma is a product manager at **Zyphos Tech**, living in **Bangalore**. - She prefers **Android phones**. Her favorite phone is the **OnePlus 11R**. - She is using **Notion** as her preferred note-taking app. - She uses **Slack** for team collaboration. - Her favorite coffee shop is **Third Wave Coffee, Indiranagar**. ### \\ud83d\\udcc5 February 2024 - Aanya moves to **Hyderabad** for a project. - She discovers and starts preferring **Samsung Galaxy Z Fold 5** over OnePlus. - She starts using **Obsidian** instead of Notion due to better knowledge graphing. - Her favorite caf\\u00e9 becomes **Roastery Coffee House** in Hyderabad. - Section 2: Slack is replaced by **Microsoft Teams** in her organization. ### \\ud83d\\udcc5 June 2024 - Aanya buys an **iPhone 15 Pro Max** after being influenced by her designer friends.\",\n  \"Document: temporal_rag_test_story.md Section 1: Her Mumbai go-to place is **Blue Tokai, Bandra**. ### \\ud83d\\udcc5 January 2025 - Aanya switches to **Pixel 9 Pro** as she becomes interested in AI-first devices. - Apple is no longer her preferred brand\\u2014she now leans toward **Google\\u2019s ecosystem**. - She moves fully to **Hyderabad**. - She now prefers **Trello** for personal projects, while her teams still use Jira and Linear. - She mentors a group of interns, one of whom, **Rahul Mehta**, prefers **One UI over Pixel UI**. ### \\ud83d\\udcc5 July 2025 - Aanya joins **Cerebro AI** as **Chief Product Officer**. - She now oversees: - **Infra Team** (uses Jira) - **ML Research Team** (uses GitHub Projects) - **AI Product Team** (uses Notion again) - She reverts to **iPhone 16** due to better integration with her Mac. - Section 2: Her preferred coffee shop is now **Sonder Coffee, HSR Layout** when she\\u2019s in Bangalore for board meetings. ---\"\n]\n        \"Document: README.md Section 1: # Multi-Tenant RAG System with Interactive CLI & FastAPI ## \\ud83c\\udfaf **Overview** A **production-ready, multi-tenant Retrieval-Augmented Generation (RAG) system** with complete data isolation, featuring both **FastAPI server** and **interactive CLI client**. Combines **Neon PostgreSQL + pgvector** for vector/hybrid search and **Neo4j + Graphiti** for knowledge graph capabilities. Built following **official Neon and Graphiti best practices** with project-per-tenant database isolation and namespace-based graph isolation. Features a comprehensive **Pydantic AI agent** with intelligent tool routing and tenant-aware operations.\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'Neon PostgreSQL', 'summary': '', 'entity_types': ['Entity'], 'attributes': {}}\n        </ENTITY>\n        "
+        "text": "The previous response attempt was invalid. Error type: Exception. Error details: . Please try again with a valid response, ensuring the output matches the expected format and constraints."
       }
     ],
     "role": "user"
   }
 ]
-Raw output: ```json
-{
-  "summary": "The multi-tenant RAG system utilizes Neon PostgreSQL with pgvector for vector and hybrid search capabilities. It ensures complete data isolation, with project-per-tenant database isolation. The system also integrates Neo4j for knowledge graph functionalities, following best practices from both Neon and Graphiti. It features a Pydantic AI agent with intelligent tool routing and tenant-aware operations."
-}
-```
+Raw output: {"extracted_entities": [{"name": "Blue Tokai, Bandra", "entity_type_id": 0}, {"name": "Aanya", "entity_type_id": 0}, {"name": "Pixel 9 Pro", "entity_type_id": 0}, {"name": "Apple", "entity_type_id": 0}, {"name": "Google\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\... (truncated) ...n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
-2025-09-17 16:18:01,192 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 16:18:01,192 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 16:18:01,193 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:01,689 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 16:18:01,690 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
+2025-10-28 14:47:03,130 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Unterminated string starting at: line 1 column 213 (char 212)
+2025-10-28 14:47:03,130 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 2/2): 
+2025-10-28 14:47:03,130 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed and retries are exhausted.
+2025-10-28 14:47:03,131 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
   {
-    "parts": [
-      {
-        "video_metadata": null,
-        "thought": null,
-        "inline_data": null,
-        "file_data": null,
-        "thought_signature": null,
-        "function_call": null,
-        "code_execution_result": null,
-        "executable_code": null,
-        "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        [\n  \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 2: - Updated `/documents` endpoint to accept ingestion preferences - Added validation for option selection ### 4. Core Logic (`tenant_data_ingestion_service.py`) - Modified ingestion workflow to conditionally process based on options - Enhanced logging for transparency ## Usage When uploading a document via CLI (option 4): ``` \\ud83d\\udee0\\ufe0f Ingestion Options Choose what to ingest into: 1. \\ud83d\\uddc3\\ufe0f Vector Database only (typically 10-30 seconds) 2. \\ud83d\\udd78\\ufe0f Knowledge Graph only (may take 1-2 minutes) 3. \\ud83d\\ude80 Both Vector DB + Knowledge Graph (may take 1-3 minutes) ``` ## Performance Impact - **Vector only**: ~10-30 seconds (embeddings + vector storage) - **Graph only**: ~1-2 minutes (entity extraction + relationship building) - **Both**: ~1-3 minutes (complete processing) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 3: ## Technical Details The implementation ensures: - Document metadata is always stored regardless of options - Vector ingestion creates chunks with embeddings for search - Graph ingestion creates episodes for relationship analysis - Proper error handling and rollback on failures - Backward compatibility with existing code ## Benefits 1. **Faster ingestion** when only search is needed 2. **Reduced resource usage** for simple use cases 3. **User choice** based on their specific requirements 4. **Better user experience** with clear options and time estimates Source: api_upload\",\n  \"Document: temporal_rag_test_story.md Section 1: # \\ud83d\\udcda Temporal Knowledge Story for RAG Testing ## \\ud83e\\udde0 Story: The Life and Choices of Aanya Sharma (2023\\u20132025) ### \\ud83d\\udcc5 December 2023 - Aanya Sharma is a product manager at **Zyphos Tech**, living in **Bangalore**. - She prefers **Android phones**. Her favorite phone is the **OnePlus 11R**. - She is using **Notion** as her preferred note-taking app. - She uses **Slack** for team collaboration. - Her favorite coffee shop is **Third Wave Coffee, Indiranagar**. ### \\ud83d\\udcc5 February 2024 - Aanya moves to **Hyderabad** for a project. - She discovers and starts preferring **Samsung Galaxy Z Fold 5** over OnePlus. - She starts using **Obsidian** instead of Notion due to better knowledge graphing. - Her favorite caf\\u00e9 becomes **Roastery Coffee House** in Hyderabad. - Section 2: Slack is replaced by **Microsoft Teams** in her organization. ### \\ud83d\\udcc5 June 2024 - Aanya buys an **iPhone 15 Pro Max** after being influenced by her designer friends.\",\n  \"Document: temporal_rag_test_story.md Section 1: Her Mumbai go-to place is **Blue Tokai, Bandra**. ### \\ud83d\\udcc5 January 2025 - Aanya switches to **Pixel 9 Pro** as she becomes interested in AI-first devices. - Apple is no longer her preferred brand\\u2014she now leans toward **Google\\u2019s ecosystem**. - She moves fully to **Hyderabad**. - She now prefers **Trello** for personal projects, while her teams still use Jira and Linear. - She mentors a group of interns, one of whom, **Rahul Mehta**, prefers **One UI over Pixel UI**. ### \\ud83d\\udcc5 July 2025 - Aanya joins **Cerebro AI** as **Chief Product Officer**. - She now oversees: - **Infra Team** (uses Jira) - **ML Research Team** (uses GitHub Projects) - **AI Product Team** (uses Notion again) - She reverts to **iPhone 16** due to better integration with her Mac. - Section 2: Her preferred coffee shop is now **Sonder Coffee, HSR Layout** when she\\u2019s in Bangalore for board meetings. ---\"\n]\n        \"Document: README.md Section 1: # Multi-Tenant RAG System with Interactive CLI & FastAPI ## \\ud83c\\udfaf **Overview** A **production-ready, multi-tenant Retrieval-Augmented Generation (RAG) system** with complete data isolation, featuring both **FastAPI server** and **interactive CLI client**. Combines **Neon PostgreSQL + pgvector** for vector/hybrid search and **Neo4j + Graphiti** for knowledge graph capabilities. Built following **official Neon and Graphiti best practices** with project-per-tenant database isolation and namespace-based graph isolation. Features a comprehensive **Pydantic AI agent** with intelligent tool routing and tenant-aware operations.\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'interactive CLI client', 'summary': '', 'entity_types': ['Entity'], 'attributes': {}}\n        </ENTITY>\n        "
-      }
-    ],
-    "role": "user"
-  }
-]
-Raw output: ```json
-{"properties": {"summary": "The interactive CLI client is part of a production-ready, multi-tenant Retrieval-Augmented Generation (RAG) system. It works in conjunction with a FastAPI server and supports data isolation. The system integrates Neon PostgreSQL with pgvector for vector/hybrid search and Neo4j with Graphiti for knowledge graph capabilities. It adheres to best practices for Neon and Graphiti, ensuring project-per-tenant database isolation and namespace-based graph isolation. The system also includes a Pydantic AI agent with intelligent tool routing and tenant-aware operations."}, "required": ["summary"], "title": "EntityAttributes_b828051cd10948bea9c626c67b920e3f", "type": "object"}
-```
-
-2025-09-17 16:18:01,690 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 16:18:01,690 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 16:18:01,691 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:04,718 - graphiti_core.graphiti - INFO - Completed add_episode in 12640.132904052734 ms
-2025-09-17 16:18:04,718 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_9cec6639-d2b0-4654-9095-0ce807b3211c_3302da83_1758106072' for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c)
-2025-09-17 16:18:04,744 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:07,830 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:08,732 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,509 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,543 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,546 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,549 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,553 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,557 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,560 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,565 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,568 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,570 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:14,572 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:15,430 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:18,821 - graphiti_core.graphiti - INFO - Completed add_episode in 14103.130102157593 ms
-2025-09-17 16:18:18,821 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_9cec6639-d2b0-4654-9095-0ce807b3211c_cea700e9_1758106084' for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c)
-2025-09-17 16:18:18,825 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:23,751 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:25,507 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,172 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,178 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,184 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,189 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,193 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,196 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,200 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,204 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,207 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,210 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,214 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,217 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,220 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,222 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,225 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,227 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,230 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,232 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,235 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:43,237 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,250 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,418 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,618 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,638 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,947 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,950 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,969 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,970 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,972 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,973 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,975 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,979 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:44,997 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:45,044 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:45,047 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:45,145 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:46,953 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 16:18:46,954 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
+    "role": "system",
+    "content": "You are an AI assistant that extracts entity nodes from text. \n    Your primary task is to extract and classify the speaker and other significant entities mentioned in the provided text.\nDo not escape unicode characters.\n\n\nAny extracted information should be returned in the same language as it was written in."
+  },
   {
-    "parts": [
-      {
-        "video_metadata": null,
-        "thought": null,
-        "inline_data": null,
-        "file_data": null,
-        "thought_signature": null,
-        "function_call": null,
-        "code_execution_result": null,
-        "executable_code": null,
-        "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        [\n  \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 2: - Updated `/documents` endpoint to accept ingestion preferences - Added validation for option selection ### 4. Core Logic (`tenant_data_ingestion_service.py`) - Modified ingestion workflow to conditionally process based on options - Enhanced logging for transparency ## Usage When uploading a document via CLI (option 4): ``` \\ud83d\\udee0\\ufe0f Ingestion Options Choose what to ingest into: 1. \\ud83d\\uddc3\\ufe0f Vector Database only (typically 10-30 seconds) 2. \\ud83d\\udd78\\ufe0f Knowledge Graph only (may take 1-2 minutes) 3. \\ud83d\\ude80 Both Vector DB + Knowledge Graph (may take 1-3 minutes) ``` ## Performance Impact - **Vector only**: ~10-30 seconds (embeddings + vector storage) - **Graph only**: ~1-2 minutes (entity extraction + relationship building) - **Both**: ~1-3 minutes (complete processing) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 3: ## Technical Details The implementation ensures: - Document metadata is always stored regardless of options - Vector ingestion creates chunks with embeddings for search - Graph ingestion creates episodes for relationship analysis - Proper error handling and rollback on failures - Backward compatibility with existing code ## Benefits 1. **Faster ingestion** when only search is needed 2. **Reduced resource usage** for simple use cases 3. **User choice** based on their specific requirements 4. **Better user experience** with clear options and time estimates Source: api_upload\",\n  \"Document: temporal_rag_test_story.md Section 1: # \\ud83d\\udcda Temporal Knowledge Story for RAG Testing ## \\ud83e\\udde0 Story: The Life and Choices of Aanya Sharma (2023\\u20132025) ### \\ud83d\\udcc5 December 2023 - Aanya Sharma is a product manager at **Zyphos Tech**, living in **Bangalore**. - She prefers **Android phones**. Her favorite phone is the **OnePlus 11R**. - She is using **Notion** as her preferred note-taking app. - She uses **Slack** for team collaboration. - Her favorite coffee shop is **Third Wave Coffee, Indiranagar**. ### \\ud83d\\udcc5 February 2024 - Aanya moves to **Hyderabad** for a project. - She discovers and starts preferring **Samsung Galaxy Z Fold 5** over OnePlus. - She starts using **Obsidian** instead of Notion due to better knowledge graphing. - Her favorite caf\\u00e9 becomes **Roastery Coffee House** in Hyderabad. - Section 2: Slack is replaced by **Microsoft Teams** in her organization. ### \\ud83d\\udcc5 June 2024 - Aanya buys an **iPhone 15 Pro Max** after being influenced by her designer friends.\",\n  \"Document: temporal_rag_test_story.md Section 1: Her Mumbai go-to place is **Blue Tokai, Bandra**. ### \\ud83d\\udcc5 January 2025 - Aanya switches to **Pixel 9 Pro** as she becomes interested in AI-first devices. - Apple is no longer her preferred brand\\u2014she now leans toward **Google\\u2019s ecosystem**. - She moves fully to **Hyderabad**. - She now prefers **Trello** for personal projects, while her teams still use Jira and Linear. - She mentors a group of interns, one of whom, **Rahul Mehta**, prefers **One UI over Pixel UI**. ### \\ud83d\\udcc5 July 2025 - Aanya joins **Cerebro AI** as **Chief Product Officer**. - She now oversees: - **Infra Team** (uses Jira) - **ML Research Team** (uses GitHub Projects) - **AI Product Team** (uses Notion again) - She reverts to **iPhone 16** due to better integration with her Mac. - Section 2: Her preferred coffee shop is now **Sonder Coffee, HSR Layout** when she\\u2019s in Bangalore for board meetings. ---\",\n  \"Document: README.md Section 1: # Multi-Tenant RAG System with Interactive CLI & FastAPI ## \\ud83c\\udfaf **Overview** A **production-ready, multi-tenant Retrieval-Augmented Generation (RAG) system** with complete data isolation, featuring both **FastAPI server** and **interactive CLI client**. Combines **Neon PostgreSQL + pgvector** for vector/hybrid search and **Neo4j + Graphiti** for knowledge graph capabilities. Built following **official Neon and Graphiti best practices** with project-per-tenant database isolation and namespace-based graph isolation. Features a comprehensive **Pydantic AI agent** with intelligent tool routing and tenant-aware operations.\",\n  \"Document: README.md Section 1: curl -X POST \\\"http://localhost:8000/auth/login\\\" \\\\ -H \\\"Content-Type: application/json\\\" \\\\ -d '{ \\\"tenant_id\\\": \\\"TENANT_ID_FROM_ABOVE\\\", \\\"api_key\\\": \\\"your_api_key\\\", \\\"user_id\\\": \\\"john_doe\\\" }' # Save the JWT token from response ``` ### **\\ud83d\\udcc4 Upload Document** ```bash # 3. Upload document for ingestion curl -X POST \\\"http://localhost:8000/documents\\\" \\\\ -H \\\"Authorization: Bearer YOUR_JWT_TOKEN\\\" \\\\ -F \\\"file=@document.pdf\\\" # Documents are automatically processed for vector and graph search ``` ### **\\ud83d\\udd0d Multi-Modal Search** ```bash # 4a. Vector Search (Semantic similarity) Section 2: curl -X POST \\\"http://localhost:8000/search\\\" \\\\ -H \\\"Authorization: Bearer YOUR_JWT_TOKEN\\\" \\\\ -H \\\"Content-Type: application/json\\\" \\\\ -d '{ \\\"query\\\": \\\"What are the company vacation policies?\\\", \\\"search_type\\\": \\\"vector\\\", \\\"limit\\\": 10 }' # 4b.\"\n]\n        \"Document: README.md Section 1: Session management and source attribution - Full integration with search capabilities ### **Monitoring & Analytics** - `GET /health` - System health and database connectivity - Comprehensive logging and audit trails - Real-time performance metrics ## \\ud83e\\uddea **Testing & Verification** ### **Deployment Verification** ```bash # Run comprehensive verification script chmod +x verify_deployment.sh ./verify_deployment.sh # This tests: # - Python environment and dependencies # - Database connectivity (Neon + Neo4j) # - Application integrity # - Security configuration # - API functionality ``` ### **Manual Testing** ```bash # Test API health curl http://localhost:8000/health # Test authentication flow Section 2: curl -X POST \\\"http://localhost:8000/tenants\\\" -H \\\"Content-Type: application/json\\\" \\\\ -d '{\\\"name\\\": \\\"Test Corp\\\", \\\"email\\\": \\\"test@corp.\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'API functionality', 'summary': '', 'entity_types': ['Entity'], 'attributes': {}}\n        </ENTITY>\n        "
-      }
-    ],
-    "role": "user"
-  }
-]
-Raw output: ```json
-{
-  "summary": "The API functionality is part of a production-ready, multi-tenant Retrieval-Augmented Generation (RAG) system. It supports data isolation, FastAPI server, and an interactive CLI client. The system integrates Neon PostgreSQL with pgvector for vector/hybrid search and Neo4j with Graphiti for knowledge graph capabilities. It features tenant-aware operations, Pydantic AI agent with intelligent tool routing, and supports document upload via a `/documents` endpoint. The API also provides multi-modal search capabilities, including vector search, and offers endpoints for authentication (`/auth/login`) and health checks (`/health`). The system is designed with project-per-tenant database isolation and namespace-based graph isolation, following best practices for Neon and Graphiti. Deployment verification includes testing API functionality."
-}
-```
-
-2025-09-17 16:18:46,955 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 16:18:46,955 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 16:18:46,957 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:47,625 - graphiti_core.llm_client.gemini_client - ERROR - 🦀 LLM generation failed parsing as JSON, will try to salvage.
-2025-09-17 16:18:47,625 - graphiti_core.llm_client.gemini_client - ERROR - Input messages: [
+    "role": "user",
+    "content": "\n<TEXT>\nDocument: temporal_rag_test_story.md Section 1: Her Mumbai go-to place is **Blue Tokai, Bandra**. ### \ud83d\udcc5 January 2025 - Aanya switches to **Pixel 9 Pro** as she becomes interested in AI-first devices. - Apple is no longer her preferred brand\u2014she now leans toward **Google\u2019s ecosystem**. - She moves fully to **Hyderabad**. - She now prefers **Trello** for personal projects, while her teams still use Jira and Linear. - She mentors a group of interns, one of whom, **Rahul Mehta**, prefers **One UI over Pixel UI**. ### \ud83d\udcc5 July 2025 - Aanya joins **Cerebro AI** as **Chief Product Officer**. - She now oversees: - **Infra Team** (uses Jira) - **ML Research Team** (uses GitHub Projects) - **AI Product Team** (uses Notion again) - She reverts to **iPhone 16** due to better integration with her Mac. - Section 2: Her preferred coffee shop is now **Sonder Coffee, HSR Layout** when she\u2019s in Bangalore for board meetings. ---\n</TEXT>\n<ENTITY TYPES>\n[{'entity_type_id': 0, 'entity_type_name': 'Entity', 'entity_type_description': 'Default entity classification. Use this entity type if the entity is not one of the other listed types.'}]\n</ENTITY TYPES>\n\nGiven the above text, extract entities from the TEXT that are explicitly or implicitly mentioned.\nFor each entity extracted, also determine its entity type based on the provided ENTITY TYPES and their descriptions.\nIndicate the classified entity type by providing its entity_type_id.\n\n\n\nGuidelines:\n1. Extract significant entities, concepts, or actors mentioned in the conversation.\n2. Avoid creating nodes for relationships or actions.\n3. Avoid creating nodes for temporal information like dates, times or years (these will be added to edges later).\n4. Be as explicit as possible in your node names, using full names and avoiding abbreviations.\n"
+  },
   {
-    "parts": [
-      {
-        "video_metadata": null,
-        "thought": null,
-        "inline_data": null,
-        "file_data": null,
-        "thought_signature": null,
-        "function_call": null,
-        "code_execution_result": null,
-        "executable_code": null,
-        "function_response": null,
-        "text": "\n\n        <MESSAGES>\n        [\n  \"Document: INGESTION_OPTIONS_README.md Section 1: # Ingestion Options Feature ## Overview The multi-tenant CLI now supports selective ingestion options, allowing users to choose between: 1. **Vector Database only** - Fast ingestion for search capabilities 2. **Knowledge Graph only** - Slower ingestion for relationship analysis 3. **Both** - Complete ingestion (recommended) ## Changes Made ### 1. Data Models (`tenant_ingestion_models.py`) - Added `ingest_vector: bool` and `ingest_graph: bool` fields to `DocumentInput` ### 2. CLI Interface (`interactive_multi_tenant_cli_http.py`) - Enhanced upload menu with ingestion options - Added time estimates for each option - Improved error handling for timeouts ### 3. API Endpoint (`interactive_multi_tenant_api.py`) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 2: - Updated `/documents` endpoint to accept ingestion preferences - Added validation for option selection ### 4. Core Logic (`tenant_data_ingestion_service.py`) - Modified ingestion workflow to conditionally process based on options - Enhanced logging for transparency ## Usage When uploading a document via CLI (option 4): ``` \\ud83d\\udee0\\ufe0f Ingestion Options Choose what to ingest into: 1. \\ud83d\\uddc3\\ufe0f Vector Database only (typically 10-30 seconds) 2. \\ud83d\\udd78\\ufe0f Knowledge Graph only (may take 1-2 minutes) 3. \\ud83d\\ude80 Both Vector DB + Knowledge Graph (may take 1-3 minutes) ``` ## Performance Impact - **Vector only**: ~10-30 seconds (embeddings + vector storage) - **Graph only**: ~1-2 minutes (entity extraction + relationship building) - **Both**: ~1-3 minutes (complete processing) Source: api_upload\",\n  \"Document: INGESTION_OPTIONS_README.md Section 3: ## Technical Details The implementation ensures: - Document metadata is always stored regardless of options - Vector ingestion creates chunks with embeddings for search - Graph ingestion creates episodes for relationship analysis - Proper error handling and rollback on failures - Backward compatibility with existing code ## Benefits 1. **Faster ingestion** when only search is needed 2. **Reduced resource usage** for simple use cases 3. **User choice** based on their specific requirements 4. **Better user experience** with clear options and time estimates Source: api_upload\",\n  \"Document: temporal_rag_test_story.md Section 1: # \\ud83d\\udcda Temporal Knowledge Story for RAG Testing ## \\ud83e\\udde0 Story: The Life and Choices of Aanya Sharma (2023\\u20132025) ### \\ud83d\\udcc5 December 2023 - Aanya Sharma is a product manager at **Zyphos Tech**, living in **Bangalore**. - She prefers **Android phones**. Her favorite phone is the **OnePlus 11R**. - She is using **Notion** as her preferred note-taking app. - She uses **Slack** for team collaboration. - Her favorite coffee shop is **Third Wave Coffee, Indiranagar**. ### \\ud83d\\udcc5 February 2024 - Aanya moves to **Hyderabad** for a project. - She discovers and starts preferring **Samsung Galaxy Z Fold 5** over OnePlus. - She starts using **Obsidian** instead of Notion due to better knowledge graphing. - Her favorite caf\\u00e9 becomes **Roastery Coffee House** in Hyderabad. - Section 2: Slack is replaced by **Microsoft Teams** in her organization. ### \\ud83d\\udcc5 June 2024 - Aanya buys an **iPhone 15 Pro Max** after being influenced by her designer friends.\",\n  \"Document: temporal_rag_test_story.md Section 1: Her Mumbai go-to place is **Blue Tokai, Bandra**. ### \\ud83d\\udcc5 January 2025 - Aanya switches to **Pixel 9 Pro** as she becomes interested in AI-first devices. - Apple is no longer her preferred brand\\u2014she now leans toward **Google\\u2019s ecosystem**. - She moves fully to **Hyderabad**. - She now prefers **Trello** for personal projects, while her teams still use Jira and Linear. - She mentors a group of interns, one of whom, **Rahul Mehta**, prefers **One UI over Pixel UI**. ### \\ud83d\\udcc5 July 2025 - Aanya joins **Cerebro AI** as **Chief Product Officer**. - She now oversees: - **Infra Team** (uses Jira) - **ML Research Team** (uses GitHub Projects) - **AI Product Team** (uses Notion again) - She reverts to **iPhone 16** due to better integration with her Mac. - Section 2: Her preferred coffee shop is now **Sonder Coffee, HSR Layout** when she\\u2019s in Bangalore for board meetings. ---\",\n  \"Document: README.md Section 1: # Multi-Tenant RAG System with Interactive CLI & FastAPI ## \\ud83c\\udfaf **Overview** A **production-ready, multi-tenant Retrieval-Augmented Generation (RAG) system** with complete data isolation, featuring both **FastAPI server** and **interactive CLI client**. Combines **Neon PostgreSQL + pgvector** for vector/hybrid search and **Neo4j + Graphiti** for knowledge graph capabilities. Built following **official Neon and Graphiti best practices** with project-per-tenant database isolation and namespace-based graph isolation. Features a comprehensive **Pydantic AI agent** with intelligent tool routing and tenant-aware operations.\",\n  \"Document: README.md Section 1: curl -X POST \\\"http://localhost:8000/auth/login\\\" \\\\ -H \\\"Content-Type: application/json\\\" \\\\ -d '{ \\\"tenant_id\\\": \\\"TENANT_ID_FROM_ABOVE\\\", \\\"api_key\\\": \\\"your_api_key\\\", \\\"user_id\\\": \\\"john_doe\\\" }' # Save the JWT token from response ``` ### **\\ud83d\\udcc4 Upload Document** ```bash # 3. Upload document for ingestion curl -X POST \\\"http://localhost:8000/documents\\\" \\\\ -H \\\"Authorization: Bearer YOUR_JWT_TOKEN\\\" \\\\ -F \\\"file=@document.pdf\\\" # Documents are automatically processed for vector and graph search ``` ### **\\ud83d\\udd0d Multi-Modal Search** ```bash # 4a. Vector Search (Semantic similarity) Section 2: curl -X POST \\\"http://localhost:8000/search\\\" \\\\ -H \\\"Authorization: Bearer YOUR_JWT_TOKEN\\\" \\\\ -H \\\"Content-Type: application/json\\\" \\\\ -d '{ \\\"query\\\": \\\"What are the company vacation policies?\\\", \\\"search_type\\\": \\\"vector\\\", \\\"limit\\\": 10 }' # 4b.\"\n]\n        \"Document: README.md Section 1: Session management and source attribution - Full integration with search capabilities ### **Monitoring & Analytics** - `GET /health` - System health and database connectivity - Comprehensive logging and audit trails - Real-time performance metrics ## \\ud83e\\uddea **Testing & Verification** ### **Deployment Verification** ```bash # Run comprehensive verification script chmod +x verify_deployment.sh ./verify_deployment.sh # This tests: # - Python environment and dependencies # - Database connectivity (Neon + Neo4j) # - Application integrity # - Security configuration # - API functionality ``` ### **Manual Testing** ```bash # Test API health curl http://localhost:8000/health # Test authentication flow Section 2: curl -X POST \\\"http://localhost:8000/tenants\\\" -H \\\"Content-Type: application/json\\\" \\\\ -d '{\\\"name\\\": \\\"Test Corp\\\", \\\"email\\\": \\\"test@corp.\"\n        </MESSAGES>\n\n        Given the above MESSAGES and the following ENTITY, update any of its attributes based on the information provided\n        in MESSAGES. Use the provided attribute descriptions to better understand how each attribute should be determined.\n\n        Guidelines:\n        1. Do not hallucinate entity property values if they cannot be found in the current context.\n        2. Only use the provided MESSAGES and ENTITY to set attribute values.\n        3. The summary attribute represents a summary of the ENTITY, and should be updated with new information about the Entity from the MESSAGES. \n            Summaries must be no longer than 250 words.\n        \n        <ENTITY>\n        {'name': 'Section 2', 'summary': '', 'entity_types': ['Entity'], 'attributes': {}}\n        </ENTITY>\n        "
-      }
-    ],
-    "role": "user"
+    "role": "user",
+    "content": "The previous response attempt was invalid. Error type: Exception. Error details: . Please try again with a valid response, ensuring the output matches the expected format and constraints."
+  },
+  {
+    "role": "user",
+    "content": "The previous response attempt was invalid. Error type: Exception. Error details: . Please try again with a valid response, ensuring the output matches the expected format and constraints."
   }
 ]
-Raw output: ```json
-{"properties": {"summary": "This document details the Temporal Knowledge Story for RAG Testing, focusing on the life and choices of Aanya Sharma from December 2023 to July 2025. It tracks her career changes, technological preferences (phones, note-taking apps, collaboration tools), and geographical locations. Key events include her move from Zyphos Tech in Bangalore to a project in Hyderabad, her evolving phone choices from OnePlus to iPhone and Pixel, and her adoption of different note-taking and collaboration tools like Notion, Obsidian, Slack, and Microsoft Teams. The story culminates with her joining Cerebro AI as Chief Product Officer and her return to using an iPhone. The document also includes API usage examples for authentication, document upload, and multi-modal search, as well as deployment verification steps and manual testing procedures for a Multi-Tenant RAG System."}, "required": ["summary"], "title": "EntityAttributes_4a5d05fde1ee44ec96b75b47952808b9", "type": "object"}
-```
-
-2025-09-17 16:18:47,626 - graphiti_core.llm_client.gemini_client - ERROR - Error in generating LLM response: Failed to parse structured response: Expecting value: line 1 column 1 (char 0)
-2025-09-17 16:18:47,626 - graphiti_core.llm_client.gemini_client - WARNING - Retrying after application error (attempt 1/2): 
-2025-09-17 16:18:47,628 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:18:54,314 - graphiti_core.graphiti - INFO - Completed add_episode in 35492.335081100464 ms
-2025-09-17 16:18:54,314 - tenant_graphiti_client - INFO - ✅ Added episode 'tenant_9cec6639-d2b0-4654-9095-0ce807b3211c_63fcfa76_1758106098' for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c)
-2025-09-17 16:18:54,314 - tenant_graphiti_client - INFO - Batch completed: 3/3 episodes for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:18:54,314 - tenant_data_ingestion_service - INFO - Successfully added 3 episodes to tenant 9cec6639-d2b0-4654-9095-0ce807b3211c graph namespace
-2025-09-17 16:18:54,314 - tenant_data_ingestion_service - INFO - Graph ingestion: Created episode 3
-2025-09-17 16:18:54,314 - tenant_data_ingestion_service - INFO - Successfully ingested document 4ed86b82-2305-4247-a90f-e54ca7e51014 for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c in 160398.61ms
-2025-09-17 16:30:36,553 - multi_tenant_agent - INFO - Using comprehensive system prompt for intelligent tool routing
-2025-09-17 16:30:36,556 - google_genai._api_client - WARNING - Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-2025-09-17 16:30:36,577 - multi_tenant_agent - INFO - Created multi-tenant agent with model: gemini-2.0-flash-thinking-exp-1219
-2025-09-17 16:30:36,581 - multi_tenant_agent - INFO - Successfully registered tenant-aware tools
-2025-09-17 16:30:36,581 - multi_tenant_agent - INFO - 🧠 Starting chat processing for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:30:36,581 - multi_tenant_agent - INFO - 📝 User query: Give me all the quick command for multi tenant RAG system.
-2025-09-17 16:30:36,581 - multi_tenant_agent - INFO - 🤖 Running agent with model gemini-2.0-flash-thinking-exp-1219
-2025-09-17 16:30:36,583 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:30:39,175 - multi_tenant_agent - INFO - 🔍 Local dual search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: quick commands for multi tenant RAG system
-2025-09-17 16:30:39,175 - multi_tenant_agent - INFO - 🔍 Vector search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: quick commands for multi tenant RAG system
-2025-09-17 16:30:46,286 - multi_tenant_agent - INFO - ✅ Vector search returned 10 results for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:30:46,286 - multi_tenant_agent - INFO - 🔍 Graph search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c: quick commands for multi tenant RAG system
-2025-09-17 16:30:46,900 - tenant_graphiti_client - INFO - Graph search for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c (namespace: tenant_9cec6639-d2b0-4654-9095-0ce807b3211c) returned 10 results
-2025-09-17 16:30:46,900 - multi_tenant_agent - INFO - ✅ Graph search returned 10 results for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:30:46,900 - multi_tenant_agent - INFO - ✅ Local dual search returned 15 combined results
-2025-09-17 16:30:46,900 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
-2025-09-17 16:30:56,179 - multi_tenant_agent - INFO - ✅ Agent completed processing for tenant 9cec6639-d2b0-4654-9095-0ce807b3211c
-2025-09-17 16:30:56,180 - multi_tenant_agent - INFO - 🔍 Extracting tool usage from agent messages
-2025-09-17 16:30:56,180 - multi_tenant_agent - INFO - Found 4 messages to analyze
-2025-09-17 16:30:56,180 - multi_tenant_agent - INFO - Message 0: <class 'pydantic_ai.messages.ModelRequest'>, attributes: ['instructions', 'kind', 'parts', 'user_text_prompt']
-2025-09-17 16:30:56,180 - multi_tenant_agent - INFO - Message 1: <class 'pydantic_ai.messages.ModelResponse'>, attributes: ['kind', 'model_name', 'otel_events', 'parts', 'timestamp', 'usage', 'vendor_details', 'vendor_id']
-2025-09-17 16:30:56,181 - multi_tenant_agent - INFO - Message 2: <class 'pydantic_ai.messages.ModelRequest'>, attributes: ['instructions', 'kind', 'parts', 'user_text_prompt']
-2025-09-17 16:30:56,181 - multi_tenant_agent - INFO - Message 3: <class 'pydantic_ai.messages.ModelResponse'>, attributes: ['kind', 'model_name', 'otel_events', 'parts', 'timestamp', 'usage', 'vendor_details', 'vendor_id']
-2025-09-17 16:30:56,181 - multi_tenant_agent - INFO - 📊 Extracted 0 tools and 0 sources
-2025-09-17 16:30:56,181 - multi_tenant_agent - INFO - 📊 Using tracked tools: ['Vector Search', 'Knowledge Graph Search', 'Dual Storage Search']
-2025-09-17 16:30:56,181 - multi_tenant_agent - INFO - 📊 Using tracked sources: 5 sources
-2025-09-17 16:30:56,181 - multi_tenant_agent - INFO - 📊 Final result: 3 tools, 1 unique sources
+No raw output available
+2025-10-28 14:47:03,131 - graphiti_core.llm_client.gemini_client - ERROR - Max retries (2) exceeded. Last error: 
+2025-10-28 14:47:03,131 - tenant_graphiti_client - ERROR - ❌ Failed to add episode for tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc: 
+2025-10-28 14:47:03,131 - tenant_graphiti_client - INFO - Batch completed: 1/2 episodes for tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc
+2025-10-28 14:47:03,131 - tenant_data_ingestion_service - INFO - Successfully added 1 episodes to tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc graph namespace
+2025-10-28 14:47:03,131 - tenant_data_ingestion_service - INFO - Graph ingestion: Created episode 1
+2025-10-28 14:47:03,131 - tenant_data_ingestion_service - INFO - Successfully ingested document 7e731a86-a9e2-4ac1-aead-683037f67957 for tenant ce9c61a5-8bba-49bb-9523-fb69ec0f4afc in 796175.07ms

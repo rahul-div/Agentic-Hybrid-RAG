@@ -169,8 +169,8 @@ class TenantGraphitiClient:
             raise ValueError("GOOGLE_API_KEY or GEMINI_API_KEY must be set")
 
         # Model configuration from environment variables
-        self.llm_model = os.getenv("GEMINI_CHAT_MODEL", "gemini-1.5-flash")
-        self.embedding_model = os.getenv("GEMINI_EMBEDDING_MODEL", "text-embedding-004")
+        self.llm_model = os.getenv("GEMINI_CHAT_MODEL", "gemini-2.0-flash-exp")
+        self.embedding_model = os.getenv("GEMINI_EMBEDDING_MODEL", "embedding-001")
 
         self.graphiti = None
         self._initialized = False
