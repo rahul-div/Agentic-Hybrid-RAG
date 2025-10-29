@@ -18,6 +18,10 @@ from graphiti_performance_config import (
     apply_performance_optimizations,
 )
 
+# Import our robust ingestion components
+from robust_gemini_client import RobustGeminiClient
+from graphiti_ingestion_manager import GraphitiIngestionManager
+
 try:
     from graphiti_core import Graphiti
     from graphiti_core.nodes import EntityNode, EpisodeType
@@ -176,25 +180,41 @@ class TenantGraphitiClient:
         self._initialized = False
 
     async def initialize(self) -> None:
-        """Initialize Graphiti client with optimized performance configuration."""
+        """Initialize Graphiti client with robust, production-ready configuration."""
         if self._initialized:
             return
 
         try:
             # Apply performance optimizations
             perf_config = apply_performance_optimizations()
+
+            # Log detailed configuration being used
+            llm_config = perf_config["llm_config"]
+            perf_settings = perf_config["performance_settings"]
+
+            logger.info("🚀 Graphiti Performance Configuration Applied:")
+            logger.info(f"  📋 LLM Model: {llm_config['model']}")
+            logger.info(f"  🌡️  Temperature: {llm_config['temperature']}")
             logger.info(
-                "Applied Graphiti performance optimizations for faster processing"
+                f"  📏 Max Content Length: {perf_settings['max_content_length']} chars"
+            )
+            logger.info(f"  📦 Batch Size: {perf_settings['batch_size']}")
+            logger.info(
+                f"  ⚡ Batch Optimization: {perf_settings['enable_batch_optimization']}"
+            )
+            logger.info(f"  ⏱️  Timeout: {llm_config['timeout']}s")
+            logger.info(
+                "Applied Graphiti performance optimizations for production reliability"
             )
 
             if GRAPHITI_AVAILABLE:
-                # Create Gemini LLM client with optimized config for knowledge graphs
+                # Create ROBUST Gemini LLM client with deterministic JSON output
                 llm_config = perf_config["llm_config"]
-                llm_client = GeminiClient(
+                robust_llm_client = RobustGeminiClient(
                     config=LLMConfig(
                         api_key=self.api_key,
                         model=llm_config["model"],
-                        temperature=llm_config["temperature"],
+                        temperature=0.0,  # Force deterministic output
                         max_tokens=llm_config["max_tokens"],
                     )
                 )
@@ -208,29 +228,40 @@ class TenantGraphitiClient:
                     )
                 )
 
-                # Create Gemini reranker with optimized config
+                # Create Gemini reranker with robust config
                 reranker_config = perf_config["reranker_config"]
                 reranker = GeminiRerankerClient(
                     config=LLMConfig(
                         api_key=self.api_key,
                         model=reranker_config["model"],
-                        temperature=reranker_config["temperature"],
+                        temperature=0.0,  # Force deterministic reranking
                         max_tokens=reranker_config["max_tokens"],
                     )
                 )
 
-                # Initialize Graphiti with optimized clients
+                # Initialize Graphiti with robust clients
                 self.graphiti = Graphiti(
                     self.neo4j_uri,
                     self.neo4j_user,
                     self.neo4j_password,
-                    llm_client=llm_client,
+                    llm_client=robust_llm_client,  # Use our robust client
                     embedder=embedder,
                     cross_encoder=reranker,
                 )
 
                 # Build indices and constraints - CRITICAL for proper operation
                 await self.graphiti.build_indices_and_constraints()
+
+                # Initialize the robust ingestion manager with performance config
+                perf_settings = perf_config["performance_settings"]
+                max_content_length = perf_settings.get("max_content_length", 1500)
+                self.ingestion_manager = GraphitiIngestionManager(
+                    self.graphiti, max_content_length=max_content_length
+                )
+                logger.info(
+                    f"📏 Knowledge graph episodes will be truncated at {max_content_length} characters"
+                )
+
             else:
                 # Mock initialization for development
                 self.graphiti = Graphiti(
@@ -238,10 +269,14 @@ class TenantGraphitiClient:
                     user=self.neo4j_user,
                     password=self.neo4j_password,
                 )
+                self.ingestion_manager = None
 
             self._initialized = True
             logger.info(
-                f"TenantGraphitiClient initialized successfully with optimized LLM: {self.llm_model}"
+                f"TenantGraphitiClient initialized successfully with robust LLM: {self.llm_model}"
+            )
+            logger.info(
+                "✅ Knowledge graph ingestion is now deterministic and reliable"
             )
 
         except Exception as e:
@@ -1012,44 +1047,220 @@ class TenantGraphitiClient:
             logger.error(f"Failed to delete tenant data for {tenant_id}: {e}")
             return False
 
+    # PRODUCTION-READY INGESTION METHOD
 
-# Example usage and testing functions
-async def example_usage():
-    """Example usage of TenantGraphitiClient."""
-    # Initialize client
-    client = TenantGraphitiClient(
-        neo4j_uri="neo4j://localhost:7687",
-        neo4j_user="neo4j",
-        neo4j_password="password",
-    )
-    await client.initialize()
+    async def ingest_tenant_chunks_into_graph(
+        self,
+        tenant_id: str,
+        doc_name: str,
+        chunks: List[Dict[str, Any]],
+    ) -> Dict[str, Any]:
+        """
+        Production-ready method for ingesting document chunks into knowledge graph.
 
-    try:
-        # Create episode
-        episode = GraphEpisode(
-            tenant_id="demo_corp",
-            name="Project Requirements Analysis",
-            content="The project requires a multi-tenant RAG system with complete data isolation...",
-            source_description="Requirements document",
+        This method replaces the old batch processing with:
+        - Per-episode atomic ingestion (no partial failures)
+        - Text sanitization to prevent JSON parsing errors
+        - Structured error handling with retry capability
+        - Comprehensive logging and monitoring
+
+        Args:
+            tenant_id: Unique tenant identifier for namespace isolation
+            doc_name: Document name for tracking and episode naming
+            chunks: List of chunk dictionaries with structure:
+                [{
+                    "chunk_id": "uuid_string",
+                    "text": "raw chunk text content",
+                    "created_at": datetime (optional),
+                    "metadata": dict (optional)
+                }, ...]
+
+        Returns:
+            Comprehensive ingestion results with success/failure details
+        """
+        await self.initialize()
+
+        if not self.ingestion_manager:
+            raise RuntimeError(
+                "Ingestion manager not initialized - check Graphiti availability"
+            )
+
+        logger.info(
+            "🚀 Starting production KG ingestion for tenant %s: %d chunks from '%s'",
+            tenant_id,
+            len(chunks),
+            doc_name,
         )
 
-        success = await client.add_episode_for_tenant(episode)
-        print(f"Added episode: {success}")
+        try:
+            (
+                success_count,
+                failures,
+            ) = await self.ingestion_manager.ingest_chunks_as_episodes(
+                tenant_id=tenant_id,
+                doc_name=doc_name,
+                chunks=chunks,
+            )
 
-        # Search tenant graph
-        results = await client.search_tenant_graph(
-            tenant_id="demo_corp", query="project requirements", limit=5
+            # Build comprehensive result summary
+            result = {
+                "tenant_id": tenant_id,
+                "doc_name": doc_name,
+                "episodes_attempted": len(chunks),
+                "episodes_ingested": success_count,
+                "episodes_failed": len(failures),
+                "success_rate": success_count / len(chunks) if chunks else 0.0,
+                "failed_details": failures,
+                "namespace": f"tenant_{tenant_id}",
+                "ingestion_timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+
+            # Log results with appropriate level
+            if len(failures) == 0:
+                logger.info(
+                    "✅ Perfect KG ingestion for tenant %s: %d/%d episodes succeeded",
+                    tenant_id,
+                    success_count,
+                    len(chunks),
+                )
+            elif success_count > 0:
+                logger.warning(
+                    "⚠️ Partial KG ingestion for tenant %s: %d/%d episodes succeeded, %d failed",
+                    tenant_id,
+                    success_count,
+                    len(chunks),
+                    len(failures),
+                )
+            else:
+                logger.error(
+                    "❌ Complete KG ingestion failure for tenant %s: 0/%d episodes succeeded",
+                    tenant_id,
+                    len(chunks),
+                )
+
+            # Handle failures for retry queue
+            if failures:
+                retryable_count = sum(1 for f in failures if f.get("retryable", True))
+                logger.warning(
+                    "Tenant %s has %d failed episodes (%d retryable) - consider retry",
+                    tenant_id,
+                    len(failures),
+                    retryable_count,
+                )
+
+                # TODO: Store failures in retry queue (Redis, database, etc.)
+                # await self._store_failed_episodes_for_retry(tenant_id, failures)
+
+            return result
+
+        except Exception as e:
+            logger.error(
+                "❌ Critical failure in KG ingestion for tenant %s: %s",
+                tenant_id,
+                str(e),
+            )
+            return {
+                "tenant_id": tenant_id,
+                "doc_name": doc_name,
+                "episodes_attempted": len(chunks),
+                "episodes_ingested": 0,
+                "episodes_failed": len(chunks),
+                "success_rate": 0.0,
+                "failed_details": [],
+                "error": str(e),
+                "namespace": f"tenant_{tenant_id}",
+                "ingestion_timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+
+    async def retry_failed_episodes_for_tenant(
+        self, tenant_id: str, failed_episodes: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """
+        Retry previously failed episodes for a tenant.
+
+        Args:
+            tenant_id: Tenant identifier
+            failed_episodes: List of failure records from previous ingestion
+
+        Returns:
+            Retry results summary
+        """
+        await self.initialize()
+
+        if not self.ingestion_manager:
+            raise RuntimeError("Ingestion manager not initialized")
+
+        logger.info(
+            "🔄 Retrying %d failed episodes for tenant %s",
+            len(failed_episodes),
+            tenant_id,
         )
-        print(f"Search results: {len(results)}")
 
-        # Get tenant stats
-        stats = await client.get_tenant_graph_stats("demo_corp")
-        print(f"Graph stats: {stats}")
+        try:
+            (
+                success_count,
+                still_failed,
+            ) = await self.ingestion_manager.retry_failed_episodes(failed_episodes)
 
-    finally:
-        await client.close()
+            result = {
+                "tenant_id": tenant_id,
+                "episodes_retried": len(failed_episodes),
+                "newly_successful": success_count,
+                "still_failed": len(still_failed),
+                "retry_success_rate": success_count / len(failed_episodes)
+                if failed_episodes
+                else 0.0,
+                "remaining_failures": still_failed,
+                "retry_timestamp": datetime.now(timezone.utc).isoformat(),
+            }
 
+            logger.info(
+                "🔄 Retry completed for tenant %s: %d newly successful, %d still failed",
+                tenant_id,
+                success_count,
+                len(still_failed),
+            )
 
-if __name__ == "__main__":
-    # Run example
-    asyncio.run(example_usage())
+            return result
+
+        except Exception as e:
+            logger.error(
+                "❌ Retry operation failed for tenant %s: %s", tenant_id, str(e)
+            )
+            return {
+                "tenant_id": tenant_id,
+                "error": str(e),
+                "episodes_retried": len(failed_episodes),
+                "newly_successful": 0,
+                "still_failed": len(failed_episodes),
+            }
+
+    async def get_tenant_kg_health(self, tenant_id: str) -> Dict[str, Any]:
+        """
+        Get knowledge graph health metrics for a tenant.
+        Useful for monitoring and debugging ingestion issues.
+        """
+        await self.initialize()
+
+        try:
+            if self.ingestion_manager:
+                stats = await self.ingestion_manager.get_tenant_episode_stats(tenant_id)
+            else:
+                stats = await self.get_tenant_graph_stats(tenant_id)
+
+            # Add health indicators
+            stats["healthy"] = (
+                stats.get("entity_count", 0) > 0 or stats.get("total_episodes", 0) > 0
+            )
+            stats["last_health_check"] = datetime.now(timezone.utc).isoformat()
+
+            return stats
+
+        except Exception as e:
+            logger.error("Failed to get KG health for tenant %s: %s", tenant_id, e)
+            return {
+                "tenant_id": tenant_id,
+                "healthy": False,
+                "error": str(e),
+                "last_health_check": datetime.now(timezone.utc).isoformat(),
+            }

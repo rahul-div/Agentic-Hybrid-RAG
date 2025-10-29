@@ -16,12 +16,12 @@ load_dotenv()
 class GraphitiPerformanceConfig:
     """Performance configuration for Graphiti operations."""
 
-    # LLM Configuration for faster processing
-    llm_model: str = "gemini-2.0-flash"  # Available in v1beta API
-    temperature: float = 0.2  # Slightly higher for better JSON generation
-    max_tokens: int = 1536  # Increased to prevent JSON truncation
-    max_retries: int = 1  # Minimal retries for speed
-    timeout: int = 30  # 30 second timeout
+    # LLM Configuration for deterministic, reliable processing
+    llm_model: str = "gemini-2.5-flash"  # Stable model, no "thinking" variants
+    temperature: float = 0.0  # Force deterministic output for KG reliability
+    max_tokens: int = 2048  # Sufficient for structured JSON responses
+    max_retries: int = 2  # Conservative retries for production
+    timeout: int = 45  # Reasonable timeout for complex extraction
 
     # Content optimization settings
     max_content_length: int = 800  # Reduced for faster processing
@@ -74,17 +74,17 @@ class GraphitiPerformanceConfig:
 
     @classmethod
     def get_optimized_config(cls) -> "GraphitiPerformanceConfig":
-        """Get pre-configured optimized settings that balance speed and quality."""
+        """Get pre-configured production settings that prioritize reliability over speed."""
         return cls(
-            llm_model="gemini-2.0-flash",  # Use available v1beta model
-            temperature=0.1,  # Lower temperature for more consistent JSON output
-            max_tokens=2048,  # Increased to ensure complete JSON responses
-            max_retries=2,  # Allow more retries for quality
-            timeout=45,  # Increased timeout for reliability
-            max_content_length=1200,  # Less aggressive truncation for better quality
+            llm_model="gemini-2.5-flash",  # Use stable model
+            temperature=0.0,  # Force deterministic output
+            max_tokens=2048,  # Sufficient for complete JSON responses
+            max_retries=2,  # Conservative retries
+            timeout=60,  # Longer timeout for reliability
+            max_content_length=1500,  # Less aggressive truncation
             preserve_sentence_boundaries=True,
-            batch_size=3,  # Keep batch size manageable
-            enable_batch_optimization=True,
+            batch_size=1,  # Process one episode at a time for atomicity
+            enable_batch_optimization=False,  # Disable for consistency
             log_timing=True,
             log_performance_warnings=True,
         )
@@ -111,11 +111,11 @@ class GraphitiPerformanceConfig:
         """Get balanced configuration between speed and quality."""
         return cls(
             llm_model="gemini-2.0-flash",
-            temperature=0.15,
+            temperature=0.0,
             max_tokens=2048,
             max_retries=2,
             timeout=60,
-            max_content_length=1000,
+            max_content_length=1200,
             preserve_sentence_boundaries=True,
             batch_size=2,
             enable_batch_optimization=True,
@@ -131,7 +131,11 @@ def get_optimized_graphiti_config() -> GraphitiPerformanceConfig:
     Returns:
         GraphitiPerformanceConfig: Optimized configuration instance
     """
-    return GraphitiPerformanceConfig.get_optimized_config()
+    import logging
+
+    logger = logging.getLogger(__name__)
+    logger.info("🎯 Using BALANCED performance configuration for Graphiti")
+    return GraphitiPerformanceConfig.get_balanced_config()
 
 
 def apply_performance_optimizations() -> Dict[str, Any]:
@@ -147,10 +151,12 @@ def apply_performance_optimizations() -> Dict[str, Any]:
     # Get base configuration
     config = get_optimized_graphiti_config()
 
-    # Get model names from environment variables
-    llm_model = os.getenv("GEMINI_CHAT_MODEL", config.llm_model)
+    # Get model names from environment variables with production defaults
+    llm_model = os.getenv("GEMINI_CHAT_MODEL", "gemini-2.5-flash")
     embedding_model = os.getenv("GEMINI_EMBEDDING_MODEL", "embedding-001")
-    reranker_model = os.getenv("GEMINI_RERANKER_MODEL", "gemini-2.0-flash")
+    reranker_model = os.getenv(
+        "GEMINI_RERANKER_MODEL", "gemini-2.5-flash"
+    )  # Use same stable model
 
     return {
         "llm_config": {

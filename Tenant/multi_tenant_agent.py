@@ -11,6 +11,10 @@ import asyncio
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from dataclasses import dataclass
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Add parent directory to path for agent imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -60,7 +64,7 @@ except ImportError as e:
             self.deps = None
 
     def get_llm_model():
-        return "gemini-2.0-flash-thinking-exp-1219"
+        return os.getenv("GEMINI_CHAT_MODEL", "gemini-2.5-flash")
 
 
 from tenant_manager import TenantManager
@@ -116,13 +120,15 @@ class MultiTenantRAGAgent:
         self,
         tenant_manager: TenantManager,
         graphiti_client: Optional[Any] = None,
-        model_name: str = "gemini-2.0-flash-thinking-exp-1219",
+        model_name: str = None,
         system_prompt: str = None,
     ):
         self.tenant_manager = tenant_manager
         self.graphiti_client = graphiti_client
-        self.model_name = model_name
-        
+        self.model_name = model_name or os.getenv(
+            "GEMINI_CHAT_MODEL", "gemini-2.5-flash"
+        )
+
         # Track tool usage for current session
         self.current_tools_used = []
         self.current_sources_found = []
@@ -427,7 +433,9 @@ class MultiTenantRAGAgent:
                 logger.info(f"🔍 Local dual search for tenant {tenant_id}: {query}")
 
                 # Track tool usage
-                self.current_tools_used.extend(["Vector Search", "Knowledge Graph Search", "Dual Storage Search"])
+                self.current_tools_used.extend(
+                    ["Vector Search", "Knowledge Graph Search", "Dual Storage Search"]
+                )
 
                 # Perform tenant-aware vector search
                 vector_results = await tenant_vector_search(ctx, query, limit)
@@ -448,13 +456,15 @@ class MultiTenantRAGAgent:
                         "chunk_id": r.get("chunk_id"),
                     }
                     combined.append(combined_result)
-                    
+
                     # Track sources
                     source_info = {
                         "source": r["document_title"],
                         "score": r["score"],
                         "type": "vector",
-                        "content_preview": r["content"][:100] + "..." if r["content"] else "",
+                        "content_preview": r["content"][:100] + "..."
+                        if r["content"]
+                        else "",
                     }
                     self.current_sources_found.append(source_info)
 
@@ -468,7 +478,7 @@ class MultiTenantRAGAgent:
                         "valid_at": r.get("valid_at"),
                     }
                     combined.append(combined_result)
-                    
+
                     # Track sources
                     source_info = {
                         "source": f"Knowledge Graph - {r.get('source_node_uuid', 'Unknown')}",
@@ -502,7 +512,7 @@ class MultiTenantRAGAgent:
             # Reset tool tracking for this chat session
             self.current_tools_used = []
             self.current_sources_found = []
-            
+
             # Log start of chat processing
             logger.info(f"🧠 Starting chat processing for tenant {context.tenant_id}")
             logger.info(
@@ -545,10 +555,12 @@ class MultiTenantRAGAgent:
                 logger.info("🔍 Extracting tool usage from agent messages")
                 messages = result.all_messages()
                 logger.info(f"Found {len(messages)} messages to analyze")
-                
+
                 for i, msg in enumerate(messages):
-                    logger.info(f"Message {i}: {type(msg)}, attributes: {[attr for attr in dir(msg) if not attr.startswith('_')]}")
-                    
+                    logger.info(
+                        f"Message {i}: {type(msg)}, attributes: {[attr for attr in dir(msg) if not attr.startswith('_')]}"
+                    )
+
                     if hasattr(msg, "tool_calls") and msg.tool_calls:
                         logger.info(
                             f"Found {len(msg.tool_calls)} tool calls in message {i}"
@@ -563,8 +575,16 @@ class MultiTenantRAGAgent:
 
                             # Map tool names to user-friendly descriptions
                             if "local_dual_search" in tool_name:
-                                tools_used.extend(["Vector Search", "Knowledge Graph Search", "Dual Storage Search"])
-                                logger.info("🔧 Used Local Dual Search tool (Vector + Graph)")
+                                tools_used.extend(
+                                    [
+                                        "Vector Search",
+                                        "Knowledge Graph Search",
+                                        "Dual Storage Search",
+                                    ]
+                                )
+                                logger.info(
+                                    "🔧 Used Local Dual Search tool (Vector + Graph)"
+                                )
                             elif "tenant_vector_search" in tool_name:
                                 tools_used.append("Vector Search")
                                 logger.info("🔧 Used Vector Search tool")
@@ -595,11 +615,15 @@ class MultiTenantRAGAgent:
 
                     # Also check for tool results to extract sources
                     if hasattr(msg, "tool_result") and msg.tool_result:
-                        logger.info(f"Found tool result in message {i}: {type(msg.tool_result)}")
+                        logger.info(
+                            f"Found tool result in message {i}: {type(msg.tool_result)}"
+                        )
                         # Extract source information from tool results
                         tool_result = msg.tool_result
                         if isinstance(tool_result, list):
-                            logger.info(f"Processing {len(tool_result)} tool result items")
+                            logger.info(
+                                f"Processing {len(tool_result)} tool result items"
+                            )
                             for item in tool_result[:5]:  # Top 5 sources
                                 if isinstance(item, dict):
                                     source_info = {
@@ -609,10 +633,15 @@ class MultiTenantRAGAgent:
                                         ),
                                         "score": item.get("score", 0),
                                         "type": item.get("type", "unknown"),
-                                        "content_preview": item.get("content", "")[:100] + "..." if item.get("content") else "",
+                                        "content_preview": item.get("content", "")[:100]
+                                        + "..."
+                                        if item.get("content")
+                                        else "",
                                     }
                                     sources_found.append(source_info)
-                                    logger.info(f"Added source: {source_info['source']}")
+                                    logger.info(
+                                        f"Added source: {source_info['source']}"
+                                    )
                         elif isinstance(tool_result, dict) and "results" in tool_result:
                             # Handle wrapped results
                             results = tool_result["results"]
@@ -626,10 +655,17 @@ class MultiTenantRAGAgent:
                                             ),
                                             "score": item.get("score", 0),
                                             "type": item.get("type", "unknown"),
-                                            "content_preview": item.get("content", "")[:100] + "..." if item.get("content") else "",
+                                            "content_preview": item.get("content", "")[
+                                                :100
+                                            ]
+                                            + "..."
+                                            if item.get("content")
+                                            else "",
                                         }
                                         sources_found.append(source_info)
-                                        logger.info(f"Added source from wrapped results: {source_info['source']}")
+                                        logger.info(
+                                            f"Added source from wrapped results: {source_info['source']}"
+                                        )
 
                 logger.info(
                     f"📊 Extracted {len(tools_used)} tools and {len(sources_found)} sources"
@@ -641,14 +677,16 @@ class MultiTenantRAGAgent:
             if not tools_used and self.current_tools_used:
                 tools_used = self.current_tools_used
                 logger.info(f"📊 Using tracked tools: {tools_used}")
-                
+
             if not sources_found and self.current_sources_found:
                 sources_found = self.current_sources_found[:5]  # Limit to top 5
                 logger.info(f"📊 Using tracked sources: {len(sources_found)} sources")
 
             # Remove duplicates and ensure we have something
             tools_used = (
-                list(dict.fromkeys(tools_used)) if tools_used else ["Dual Storage Search"]
+                list(dict.fromkeys(tools_used))
+                if tools_used
+                else ["Dual Storage Search"]
             )
 
             # Remove duplicate sources
@@ -660,7 +698,9 @@ class MultiTenantRAGAgent:
                     unique_sources.append(source)
                     seen_sources.add(source_key)
 
-            logger.info(f"📊 Final result: {len(tools_used)} tools, {len(unique_sources)} unique sources")
+            logger.info(
+                f"📊 Final result: {len(tools_used)} tools, {len(unique_sources)} unique sources"
+            )
 
             return {
                 "response": response_text,

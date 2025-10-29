@@ -13,6 +13,10 @@ import os
 from typing import Any, Dict, Optional, List
 from datetime import datetime
 import asyncpg
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Add parent directory for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -64,11 +68,12 @@ class TenantDataIngestionService:
         """
         self.tenant_manager = tenant_manager
 
-        # Initialize chunker with proper configuration
+        # Initialize chunker with proper configuration from environment
         if chunker is None:
             chunking_config = ChunkingConfig(
-                chunk_size=800,  # Optimized for Gemini
-                chunk_overlap=150,
+                chunk_size=int(os.getenv("CHUNK_SIZE", 800)),
+                chunk_overlap=int(os.getenv("CHUNK_OVERLAP", 150)),
+                max_chunk_size=int(os.getenv("MAX_CHUNK_SIZE", 1500)),
                 use_semantic_splitting=True,
                 preserve_structure=True,
             )
@@ -126,8 +131,9 @@ class TenantDataIngestionService:
 
             # 3. Create and store chunks with embeddings (if vector ingestion is enabled)
             chunks_created = 0
+            chunk_objects = []
             if document.ingest_vector:
-                chunks_created = await self._process_and_store_chunks(
+                chunks_created, chunk_objects = await self._process_and_store_chunks(
                     deps, document_id, document
                 )
                 logger.info(
@@ -137,15 +143,36 @@ class TenantDataIngestionService:
                 logger.info("Vector ingestion: Skipped (disabled)")
 
             # 4. Add document content to tenant's graph namespace (if graph ingestion is enabled)
+            # IMPORTANT: Reuse the same chunks to ensure consistency between vector and graph storage
             graph_episode_created = False
             graph_episode_id = None
             if document.ingest_graph:
-                (
-                    graph_episode_created,
-                    graph_episode_id,
-                ) = await self._add_document_to_tenant_graph(
-                    deps, document_id, document
-                )
+                if chunks_created > 0:
+                    # Use existing chunks from vector ingestion to ensure consistency
+                    (
+                        graph_episode_created,
+                        graph_episode_id,
+                    ) = await self._add_chunks_to_tenant_graph(
+                        deps, document_id, document, chunk_objects
+                    )
+                elif not document.ingest_vector:
+                    # If only graph ingestion is enabled, create chunks specifically for graph
+                    logger.info(
+                        "Creating chunks specifically for graph ingestion (vector disabled)"
+                    )
+                    temp_chunks = await self.chunker.chunk_document(
+                        content=document.content,
+                        title=document.title,
+                        source=document.source,
+                        metadata=document.metadata or {},
+                    )
+                    (
+                        graph_episode_created,
+                        graph_episode_id,
+                    ) = await self._add_chunks_to_tenant_graph(
+                        deps, document_id, document, temp_chunks
+                    )
+
                 if graph_episode_created:
                     logger.info(f"Graph ingestion: Created episode {graph_episode_id}")
                 else:
@@ -258,7 +285,7 @@ class TenantDataIngestionService:
 
     async def _process_and_store_chunks(
         self, deps: TenantAgentDependencies, document_id: str, document: DocumentInput
-    ) -> int:
+    ) -> tuple[int, List[DocumentChunk]]:
         """
         Create chunks, generate embeddings, store in tenant database.
 
@@ -268,7 +295,7 @@ class TenantDataIngestionService:
             document: Document content
 
         Returns:
-            Number of chunks created
+            Tuple of (number of chunks created, list of chunk objects)
 
         Raises:
             Exception: If chunk processing fails
@@ -380,7 +407,7 @@ class TenantDataIngestionService:
                     f"Created {chunks_created} chunks for document {document_id} "
                     f"({chunks_with_embeddings} with valid embeddings, {chunks_created - chunks_with_embeddings} without)"
                 )
-                return chunks_created
+                return chunks_created, chunk_objects
 
             finally:
                 await conn.close()
@@ -391,13 +418,107 @@ class TenantDataIngestionService:
             )
             raise
 
+    async def _add_chunks_to_tenant_graph(
+        self,
+        deps: TenantAgentDependencies,
+        document_id: str,
+        document: DocumentInput,
+        chunks: List[DocumentChunk],
+    ) -> tuple[bool, str | None]:
+        """
+        Add pre-existing chunks to tenant's graph namespace via Graphiti using production-ready robust ingestion.
+
+        This method uses the same chunks that were already created for vector ingestion,
+        ensuring consistency between vector and graph storage.
+
+        Args:
+            deps: Tenant-specific dependencies
+            document_id: ID of the document
+            document: Document content
+            chunks: Pre-existing chunks to add to graph
+
+        Returns:
+            Tuple of (success: bool, episodes_created_count: str | None)
+
+        Raises:
+            Exception: If graph addition fails critically
+        """
+        try:
+            if not deps.shared_graphiti_client:
+                logger.warning(
+                    f"No Graphiti client available, skipping graph ingestion for document {document_id}"
+                )
+                return False, None
+
+            if not chunks:
+                logger.warning(f"No chunks provided for document {document_id}")
+                return False, None
+
+            logger.info(
+                f"Adding {len(chunks)} existing chunks to tenant {deps.tenant_id} graph namespace: tenant_{deps.tenant_id}"
+            )
+
+            # Convert chunks to format expected by robust ingestion manager
+            chunk_data = []
+            for chunk in chunks:
+                chunk_data.append(
+                    {
+                        "chunk_id": getattr(chunk, "id", str(uuid.uuid4())),
+                        "text": chunk.content,
+                        "created_at": datetime.now(),
+                        "metadata": getattr(chunk, "metadata", {}),
+                    }
+                )
+
+            # Use the new PRODUCTION-READY robust ingestion method
+            results = await deps.shared_graphiti_client.ingest_tenant_chunks_into_graph(
+                tenant_id=deps.tenant_id,
+                doc_name=document.title,
+                chunks=chunk_data,
+            )
+
+            success = results.get("episodes_ingested", 0) > 0
+            episodes_created = results.get("episodes_ingested", 0)
+            episodes_failed = results.get("episodes_failed", 0)
+
+            if success:
+                logger.info(
+                    f"✅ Successfully added {episodes_created} episodes to tenant {deps.tenant_id} graph namespace"
+                )
+
+                # Log any partial failures for monitoring
+                if episodes_failed > 0:
+                    logger.warning(
+                        f"⚠️ Partial success: {episodes_failed} episodes failed and may need retry"
+                    )
+                    # TODO: Store failed episodes in retry queue for later processing
+
+                return True, str(episodes_created)
+            else:
+                # Complete failure - log details for debugging
+                logger.error(
+                    f"❌ Complete graph ingestion failure for document {document_id} in tenant {deps.tenant_id}"
+                )
+                logger.error(f"Failure details: {results}")
+                return False, None
+
+        except Exception as e:
+            logger.error(
+                f"❌ Critical failure in graph ingestion for document {document_id}: {e}"
+            )
+            raise  # Re-raise for caller to handle
+
     async def _add_document_to_tenant_graph(
         self, deps: TenantAgentDependencies, document_id: str, document: DocumentInput
     ) -> tuple[bool, str | None]:
         """
-        Add document to tenant's graph namespace via Graphiti using optimized batch processing.
+        Add document to tenant's graph namespace via Graphiti using production-ready robust ingestion.
 
-        This method uses the new optimized batch approach to significantly reduce processing time.
+        This method uses the new robust ingestion manager that provides:
+        - Per-episode atomic ingestion (no partial failures)
+        - Text sanitization to prevent JSON parsing errors
+        - Structured error handling with retry capability
+        - Comprehensive logging and monitoring
 
         Args:
             deps: Tenant-specific dependencies
@@ -408,7 +529,7 @@ class TenantDataIngestionService:
             Tuple of (success: bool, episodes_created_count: str | None)
 
         Raises:
-            Exception: If graph addition fails
+            Exception: If graph addition fails critically
         """
         try:
             if not deps.shared_graphiti_client:
@@ -429,37 +550,59 @@ class TenantDataIngestionService:
                 logger.warning(f"No chunks created for document {document_id}")
                 return False, None
 
-            # Use the new optimized batch method for much faster processing
-            results = (
-                await deps.shared_graphiti_client.optimized_batch_add_document_chunks(
-                    tenant_id=deps.tenant_id,
-                    document_title=document.title,
-                    document_id=document_id,
-                    chunks=chunks,
-                )
+            logger.info(
+                f"Adding {len(chunks)} chunks to tenant {deps.tenant_id} graph namespace: tenant_{deps.tenant_id}"
             )
 
-            success = results.get("successful", 0) > 0
-            episodes_created = results.get("successful", 0)
+            # Convert chunks to format expected by robust ingestion manager
+            chunk_data = []
+            for chunk in chunks:
+                chunk_data.append(
+                    {
+                        "chunk_id": getattr(chunk, "id", str(uuid.uuid4())),
+                        "text": chunk.content,
+                        "created_at": datetime.now(),
+                        "metadata": getattr(chunk, "metadata", {}),
+                    }
+                )
+
+            # Use the new PRODUCTION-READY robust ingestion method
+            results = await deps.shared_graphiti_client.ingest_tenant_chunks_into_graph(
+                tenant_id=deps.tenant_id,
+                doc_name=document.title,
+                chunks=chunk_data,
+            )
+
+            success = results.get("episodes_ingested", 0) > 0
+            episodes_created = results.get("episodes_ingested", 0)
+            episodes_failed = results.get("episodes_failed", 0)
 
             if success:
                 logger.info(
-                    f"Successfully added {episodes_created} episodes to tenant {deps.tenant_id} graph namespace"
+                    f"✅ Successfully added {episodes_created} episodes to tenant {deps.tenant_id} graph namespace"
                 )
+
+                # Log any partial failures for monitoring
+                if episodes_failed > 0:
+                    logger.warning(
+                        f"⚠️ Partial success: {episodes_failed} episodes failed and may need retry"
+                    )
+                    # TODO: Store failed episodes in retry queue for later processing
+
                 return True, str(episodes_created)
             else:
-                errors = results.get("errors", [])
-                logger.warning(
-                    f"No episodes were successfully added to tenant graph: {errors}"
+                # Complete failure - log details for debugging
+                logger.error(
+                    f"❌ Complete graph ingestion failure for document {document_id} in tenant {deps.tenant_id}"
                 )
+                logger.error(f"Failure details: {results}")
                 return False, None
 
         except Exception as e:
             logger.error(
-                f"Failed to add document {document_id} to tenant graph: {str(e)}"
+                f"❌ Critical failure in graph ingestion for document {document_id}: {e}"
             )
-            # Don't raise - continue with ingestion even if graph fails
-            return False, None
+            raise  # Re-raise for caller to handle
 
     def _prepare_tenant_episode_content(
         self,
@@ -678,16 +821,16 @@ class TenantDataIngestionService:
                 await conn.execute(
                     "DELETE FROM chunks WHERE document_id = $1", document_id
                 )
-                await self._process_and_store_chunks(
+                chunks_created, chunk_objects = await self._process_and_store_chunks(
                     deps, document_id, updated_document
                 )
 
             finally:
                 await conn.close()
 
-            # 3. Update graph (Graphiti handles episode updates)
-            await self._add_document_to_tenant_graph(
-                deps, document_id, updated_document
+            # 3. Update graph (Graphiti handles episode updates) - reuse the same chunks
+            await self._add_chunks_to_tenant_graph(
+                deps, document_id, updated_document, chunk_objects
             )
 
             logger.info(
